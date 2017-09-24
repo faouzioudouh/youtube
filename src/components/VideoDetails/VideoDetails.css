@@ -1,0 +1,19 @@
+.VideoDetails__metadata {
+    display: table;
+    width: 100%;
+}
+
+.VideoDetails__metadata-views-count,
+.VideoDetails__metadata-reactions{
+    display: table-cell;
+    color: #8c8c8c;
+}
+
+.VideoDetails__metadata-views-count {
+    width: 60%;
+}
+
+.VideoDetails__metadata-reactions{
+    float: right;
+    padding: 0 10px;    
+}

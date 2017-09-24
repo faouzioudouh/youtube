@@ -1,0 +1,8 @@
+.Input__input {
+    padding: 0 0 0 4px;
+    margin: 0;
+    height: 30px;
+    width: 100%;
+    border: 1px solid #757575;
+    border-radius: 2px;
+}

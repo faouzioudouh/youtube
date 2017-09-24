@@ -1,0 +1,29 @@
+{
+  "name": "instantyoutube",
+  "version": "0.1.0",
+  "private": false,
+  "dependencies": {
+    "@types/classnames": "^2.2.3",
+    "@types/gapi.youtube": "^3.0.32",
+    "@types/jest": "^20.0.8",
+    "@types/lodash": "^4.14.74",
+    "@types/node": "^8.0.26",
+    "@types/react": "^16.0.5",
+    "@types/react-dom": "^15.5.4",
+    "@types/react-redux": "^5.0.8",
+    "@types/redux": "^3.6.0",
+    "classnames": "^2.2.5",
+    "lodash": "^4.17.4",
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-redux": "^5.0.6",
+    "react-scripts-ts": "2.6.0",
+    "redux-thunk": "^2.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts-ts start",
+    "build": "react-scripts-ts build",
+    "test": "react-scripts-ts test --env=jsdom",
+    "eject": "react-scripts-ts eject"
+  }
+}

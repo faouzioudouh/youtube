@@ -1,0 +1,58 @@
+.VideoCard {
+    display: table;
+}
+
+.VideoCard__list {
+    margin: 0;
+}
+
+.VideoCard__list-item {
+    list-style: none;
+    margin-bottom: 10px;    
+}
+
+.VideoCard__list-item--current {
+    color: #0aa3e1;
+}
+
+.VideoCard__list-item:last-child {
+    margin-bottom: 0;
+}
+
+.VideoCard__thumbnail,
+.VideoCard__metadata {
+    display: table-cell;
+    vertical-align: top;
+    cursor: pointer;
+}
+
+.VideoCard__thumbnail {
+    margin-right: 8px;
+    height: 94px;
+    width: 130px;
+}
+
+.VideoCard__video-title {
+    display: block;
+    margin: 0 0 4px 0;
+    max-height: 3.3rem;
+    overflow: hidden;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.VideoCard__video-title-wrapper {
+    margin: 0;
+}
+
+.VideoCard__channel-title,
+.VideoCard__view-count {
+    font-size: .75rem;
+    line-height: .9rem;
+    padding: 1px 0;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: flex;
+    color: #8c8c8c
+}
