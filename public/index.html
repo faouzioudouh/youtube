@@ -1,30 +1,42 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
 
-    <title>Instant Youtube</title>
-  </head>
-  <body>
-    <noscript>
-      You need to enable JavaScript to run this app.
-    </noscript>
-    <div id="root"></div>
-    <span
-      id="a11yNotif"
-      class="element-visually-hidden"
-      aria-live="assertive"
-      role="alert">
-    </span>
-    <script>
-      function googleApiInit() {
-        gapi.client.setApiKey('AIzaSyDhD0zoAfEUi1b0WXhZRlsrkeAf1SGjB7w');
-        gapi.client.load('youtube', 'v3');
-      } 
-    </script>
-    <script src="https://apis.google.com/js/client.js?onload=googleApiInit"></script>    
-  </body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon-youtube.ico">
+
+  <title>Youtube Instant</title>
+</head>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+  </span>
+  <script>
+    function googleApiInit() {
+      gapi.client.setApiKey('AIzaSyDhD0zoAfEUi1b0WXhZRlsrkeAf1SGjB7w');
+      gapi.client.load('youtube', 'v3');
+    }
+  </script>
+
+  <!-- Global Site Tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-106952005-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments)
+    };
+    gtag('js', new Date());
+
+    gtag('config', 'UA-106952005-1');
+  </script>
+
+  <script src="https://apis.google.com/js/client.js?onload=googleApiInit"></script>
+</body>
+
 </html>

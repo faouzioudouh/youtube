@@ -1,13 +1,11 @@
 {
-  "short_name": "IY",
-  "name": "Instant Youtube",
-  "icons": [
-    {
-      "src": "favicon.ico",
-      "sizes": "192x192",
-      "type": "image/png"
-    }
-  ],
+  "short_name": "YI",
+  "name": "Youtube Instant",
+  "icons": [{
+    "src": "favicon.ico",
+    "sizes": "192x192",
+    "type": "image/png"
+  }],
   "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#000000",

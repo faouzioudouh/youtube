@@ -2,6 +2,7 @@
   "name": "instantyoutube",
   "version": "0.1.0",
   "private": false,
+  "homepage": "http://faouzioudouh.github.io/youtube",
   "dependencies": {
     "@types/classnames": "^2.2.3",
     "@types/gapi.youtube": "^3.0.32",
