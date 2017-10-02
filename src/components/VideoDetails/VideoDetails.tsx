@@ -2,6 +2,9 @@ import * as React from 'react';
 import { formatNumber } from '../../libs/formatNumber';
 import './VideoDetails.css';
 
+import ChannelCard from '../ChannelCard';
+
+
 interface Props {
     video: GoogleApiYouTubeVideoResource;
 }
@@ -12,8 +15,23 @@ const VideoDetails = ({video}: Props) => {
     }
 
     const { snippet, statistics } = video;
-    const { title } = snippet;
-    const { dislikeCount, likeCount, viewCount } = statistics;
+    const {
+        title,
+        channelId,
+        channelTitle,
+        description,
+        publishedAt } = snippet;
+
+    const { dislikeCount,
+            likeCount,
+            viewCount} = statistics;
+
+    const ChannelProps = {
+        channelId,
+        channelTitle,
+        description,
+        publishedAt
+    }
 
     return (
         <div className="VideoDetails">
@@ -27,6 +45,9 @@ const VideoDetails = ({video}: Props) => {
                 <div className="VideoDetails__metadata-reactions">
                     <span>{formatNumber(likeCount)} Likes | {formatNumber(dislikeCount)} Dislikes</span>
                 </div>
+            </div>
+            <div className="VideoDetails__description">
+                <ChannelCard {...ChannelProps} />
             </div>
         </div>
     );
