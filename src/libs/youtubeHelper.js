@@ -5,12 +5,14 @@ export {
   getTopSearchResult,
   getVideosMetadata,
   getMostPopularVideos,
-  getRelatedVideos
+  getRelatedVideos,
+  loadChannelById
 }
 
 const YOUTUBE_VIDEO = 'youtube#video';
 const YOUTUBE_SEARCH = 'search';
 const YOUTUBE_VIDEOS = 'videos';
+const YOUTUBE_CHANNELS = 'channels';
 
 /**
  * Load youtube iframe API
@@ -127,4 +129,15 @@ const youtubeSearchList = options => (TYPE = YOUTUBE_SEARCH) => callback => {
 
   const request = gapi.client.youtube[TYPE].list(mergedOptions);
   return request.execute(callback);
+}
+
+const loadChannelById = channelId => callback => {
+  const request = youtubeSearchList({
+    id: channelId,
+    part: 'snippet'
+  });
+
+  return request(YOUTUBE_CHANNELS)((response) => {
+    callback(response);
+  });
 }

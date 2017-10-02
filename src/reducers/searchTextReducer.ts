@@ -5,7 +5,7 @@ interface Action {
     text?: string;
 }
 
-const searchText = (state = 'hello', action: Action = {}) => {
+const searchText = (state: string =  '', action: Action = {}) => {
   switch (action.type) {
     case SEARCH_TEXT_CHANGED:
         return action.text;

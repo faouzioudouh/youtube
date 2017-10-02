@@ -1,7 +1,7 @@
 import configureStore from './configureStore';
 
 const initialState = {
-    searchText: 'BYn6rQ3zVY4'
+    searchText: '814eR5K7KD8'
 };
 
 // The instance of the current store shared in the application.
