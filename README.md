@@ -1,1 +1,0 @@
-Youtube with React, redux and typescript !!
