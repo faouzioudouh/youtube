@@ -8,6 +8,9 @@
 
 .ChannelCard__thumbnail {
     display: inline-block;
+}
+
+.ChannelCard__thumbnail {
     margin-right: 16px;
     width: 48px;
     height: 48px;

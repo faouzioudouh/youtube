@@ -2,7 +2,6 @@ import { YOUTUBE_SET_VIDEOS } from '../actions/youtube';
 
 interface Action {
     videos?: Array<GoogleApiYouTubeVideoResource>;
-    videoId?: string;
     type: string;
 }
 

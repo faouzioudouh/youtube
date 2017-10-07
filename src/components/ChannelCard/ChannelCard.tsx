@@ -2,7 +2,6 @@ import * as React from 'react';
 import { get } from 'lodash';
 
 import YTime from '../../helpers/YTime';
-
 import './ChannelCard.css';
 
 interface Props {
@@ -15,13 +14,13 @@ interface Props {
 class ChannelCard extends React.Component<Props> {
     render() {
         const channel: GoogleApiYouTubeChannelResource  = get(this.props, 'channel.items[0]');
-        if (!channel) {
+        if(!channel) {
             return null;
         }
 
-        const { publishedAt } = this.props;        
-        const title: string = get(channel, 'snippet.title');
+        const title: string = get(channel, 'snippet.title')
         const thumbnailUrl: string = get(channel, "snippet.thumbnails['default'].url");
+        const thumbnailWidth: string = get(channel, "snippet.thumbnails['default'].width");
         const channelUrl: string = `https://www.youtube.com/channel/${channel.id}`;
 
         return (
@@ -38,6 +37,11 @@ class ChannelCard extends React.Component<Props> {
                     <span className="ChannelCard__video-publish-date">
                         Published on <YTime date={publishedAt} format="LL" />
                     </span>
+                        <img src={thumbnailUrl} alt={title} width={thumbnailWidth} />
+                    </a>
+                </div>
+                <div className="ChannelCard__details">
+                    <span>{title}</span>
                 </div>
             </div>
         );

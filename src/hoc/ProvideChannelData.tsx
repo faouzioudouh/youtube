@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface State {
-    channel?: GoogleApiYouTubeChannelResource;
+    channel?: GoogleApiYouTubeChannelResource    
 }
 
 const provideChannelData = (Component: React.ComponentClass<Props>) => {
@@ -43,6 +43,7 @@ const provideChannelData = (Component: React.ComponentClass<Props>) => {
             loadChannelById(this.props.channelId)(
                 (channelData: GoogleApiYouTubeChannelResource) =>
                     this.setState({channel: channelData}));
+                (channelData: GoogleApiYouTubeChannelResource) => this.setState({channel: channelData}));
         }    
     }
 
