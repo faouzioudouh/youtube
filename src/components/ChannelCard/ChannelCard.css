@@ -32,7 +32,9 @@
     line-height: 1.6rem;
 }
 
-.ChannelCard__link {
+.ChannelCard__link,
+.ChannelCard__link:active  {
+    color: #0E0F0F;
     display: inline-block;
     cursor: pointer;
     text-decoration: none;
