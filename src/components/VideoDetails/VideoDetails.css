@@ -1,6 +1,7 @@
 .VideoDetails__metadata {
     display: table;
     width: 100%;
+    padding-bottom: 20px;
 }
 
 .VideoDetails__metadata-views-count,
@@ -15,5 +16,22 @@
 
 .VideoDetails__metadata-reactions{
     float: right;
-    padding: 0 10px;    
+    padding: 0 10px;
 }
+
+.VideoDetails__description {
+    padding-top: 20px;
+    border-top: 1px solid #ccc;
+    min-height: 83px;
+    display: block;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 24px;
+    padding: 16px 0;
+}
+
+.VideoDetails__description > p > a {
+    color: #3893e6;
+    display: inline-block;
+    cursor: pointer;
+    text-decoration: none;
+ }

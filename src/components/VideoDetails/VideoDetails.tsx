@@ -3,7 +3,7 @@ import { formatNumber } from '../../libs/formatNumber';
 import './VideoDetails.css';
 
 import ChannelCard from '../ChannelCard';
-
+import FormatString from '../../helpers/FormatString';
 
 interface Props {
     video: GoogleApiYouTubeVideoResource;
@@ -31,7 +31,7 @@ const VideoDetails = ({video}: Props) => {
         channelTitle,
         description,
         publishedAt
-    }
+    };
 
     return (
         <div className="VideoDetails">
@@ -48,6 +48,7 @@ const VideoDetails = ({video}: Props) => {
             </div>
             <div className="VideoDetails__description">
                 <ChannelCard {...ChannelProps} />
+                <FormatString text={description} tagName="p" />
             </div>
         </div>
     );

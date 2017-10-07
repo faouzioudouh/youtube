@@ -4,10 +4,10 @@ import { get, omit } from 'lodash';
 import { loadChannelById } from '../libs/youtubeHelper.js';
 
 interface Props {
-    loadChannel?: Function,
-    channelId?: string,
-    channel?: GoogleApiYouTubeChannelResource        
-};
+    loadChannel?: Function;
+    channelId?: string;
+    channel?: GoogleApiYouTubeChannelResource;
+}
 
 interface State {
     channel?: GoogleApiYouTubeChannelResource    
@@ -23,7 +23,11 @@ const provideChannelData = (Component: React.ComponentClass<Props>) => {
 
         this.state = {
             channel: undefined
-        }
+        };
+    }
+
+    shouldComponentUpdate(nextProps: Props) {
+        return nextProps.channelId !== this.props.channelId;
     }
 
     componentDidUpdate(nextProps: Props) {
@@ -37,6 +41,8 @@ const provideChannelData = (Component: React.ComponentClass<Props>) => {
     getChannelData(channelId: string) {
         if (channelId) {
             loadChannelById(this.props.channelId)(
+                (channelData: GoogleApiYouTubeChannelResource) =>
+                    this.setState({channel: channelData}));
                 (channelData: GoogleApiYouTubeChannelResource) => this.setState({channel: channelData}));
         }    
     }
