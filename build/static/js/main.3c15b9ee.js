@@ -46897,8 +46897,13 @@ var YoutubePlayerContainer = (function (_super) {
     YoutubePlayerContainer.prototype.playNextVideo = function () {
         var youtubeSetVideos = this.props.youtubeSetVideos;
         var videoIndex = youtubeSetVideos.map(function (video) { return video.id; }).indexOf(this.props.currentVideo.id);
+        // Play next video
         if (videoIndex !== -1 && videoIndex++ < youtubeSetVideos.length) {
             this.props.handleCurrentVideo(youtubeSetVideos[videoIndex]);
+        }
+        // Play first video
+        if (videoIndex === -1) {
+            this.props.handleCurrentVideo(youtubeSetVideos[0]);
         }
     };
     YoutubePlayerContainer.prototype.render = function () {
@@ -47057,11 +47062,10 @@ var provideChannelData = function (Component) {
             };
             return _this;
         }
-        ProductProvider.prototype.shouldComponentUpdate = function (nextProps) {
-            return nextProps.channelId !== this.props.channelId;
-        };
-        ProductProvider.prototype.componentDidUpdate = function (nextProps) {
-            this.getChannelData(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash__["get"])(nextProps, 'channelId'));
+        ProductProvider.prototype.componentDidUpdate = function (prevProps) {
+            if (prevProps.channelId !== this.props.channelId) {
+                this.getChannelData(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash__["get"])(this.props, 'channelId'));
+            }
         };
         ProductProvider.prototype.componentDidMount = function () {
             this.getChannelData(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_lodash__["get"])(this.props, 'channelId'));
@@ -47132,6 +47136,8 @@ var currentVideo = function (state, action) {
     if (state === void 0) { state = null; }
     switch (action.type) {
         case __WEBPACK_IMPORTED_MODULE_0__actions_youtube__["b" /* CURRENT_VIDEO */]:
+            // Change page title to current video title.
+            document.title = action.video.snippet.title;
             return action.video;
         default:
             return state;
@@ -47796,4 +47802,4 @@ module.exports = __webpack_require__(109);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.d6131615.js.map
+//# sourceMappingURL=main.3c15b9ee.js.map
