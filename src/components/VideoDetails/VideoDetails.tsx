@@ -4,6 +4,7 @@ import './VideoDetails.css';
 
 import ChannelCard from '../ChannelCard';
 import FormatString from '../../helpers/FormatString';
+import Expander from '../../components/Expander';
 
 interface Props {
     video: GoogleApiYouTubeVideoResource;
@@ -48,7 +49,9 @@ const VideoDetails = ({video}: Props) => {
             </div>
             <div className="VideoDetails__description">
                 <ChannelCard {...ChannelProps} />
-                <FormatString text={description} tagName="p" />
+                <Expander collapsedHeight="60" collapsedClass="colapsed" expandedClass="expanded">
+                    <FormatString text={description} tagName="p" />
+                </Expander>
             </div>
         </div>
     );
