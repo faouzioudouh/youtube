@@ -6,19 +6,36 @@ interface Props {
     tagName: string;
 }
 
-class FormatString extends React.Component<Props> {
+interface State {
+    output: string;
+}
+
+const formatString = (text: string): string => {
+    const output = anchorme(text);
+    return output.replace(/(?:\r\n|\r|\n)/g, '<br />');
+};
+
+class FormatString extends React.Component<Props, State> {
     output: string;
     constructor(props: Props) {
         super(props);
+        this.state = {
+            output: formatString(props.text)
+        };
+    }
 
-        this.output = anchorme(props.text);
-        this.output = this.output.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    shouldComponentUpdate(nextProps: Props) {
+        return nextProps.text !== this.props.text;
+    }
+
+    componentDidUpdate() {
+        this.setState({output: formatString(this.props.text)});        
     }
 
     render() {
         return React.createElement(this.props.tagName, {
             dangerouslySetInnerHTML: {
-                __html: this.output
+                __html: this.state.output
             }
         });
     }

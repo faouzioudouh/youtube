@@ -41,7 +41,7 @@ const VideoDetails = ({video}: Props) => {
             </div>
             <div className="VideoDetails__metadata">
                 <div className="VideoDetails__metadata-views-count">
-                    <span aria-label={`${viewCount} Views`}>{formatNumber(viewCount)} Views</span>
+                    <span aria-label={`${viewCount} Views`}>{formatNumber(viewCount)} VIEWS</span>
                 </div>
                 <div className="VideoDetails__metadata-reactions">
                     <span>{formatNumber(likeCount)} Likes | {formatNumber(dislikeCount)} Dislikes</span>
