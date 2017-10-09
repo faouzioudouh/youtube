@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { get } from 'lodash';
 import classnames from 'classnames';
 
 // Types
@@ -10,7 +9,6 @@ class Expander extends React.Component<Props, State> {
     refElement: HTMLDivElement;
     constructor(props: Props) {
         super(props);
-        this.childrenText = get(this.props.children, 'props.text');
 
         this.collapse = this.collapse.bind(this);
         this.expand = this.expand.bind(this);
