@@ -62,8 +62,14 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
   playNextVideo() {
     const { youtubeSetVideos } = this.props;
     let videoIndex = youtubeSetVideos.map(video => video.id).indexOf(this.props.currentVideo.id);
+    // Play next video
     if (videoIndex !== -1 && videoIndex++ < youtubeSetVideos.length) {
       this.props.handleCurrentVideo(youtubeSetVideos[videoIndex]);
+    }
+
+    // Play first video
+    if (videoIndex === -1) {
+      this.props.handleCurrentVideo(youtubeSetVideos[0]);
     }
   }
 

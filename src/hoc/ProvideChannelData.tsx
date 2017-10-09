@@ -10,7 +10,7 @@ interface Props {
 }
 
 interface State {
-    channel?: GoogleApiYouTubeChannelResource    
+    channel?: GoogleApiYouTubeChannelResource;
 }
 
 const provideChannelData = (Component: React.ComponentClass<Props>) => {
@@ -26,12 +26,10 @@ const provideChannelData = (Component: React.ComponentClass<Props>) => {
         };
     }
 
-    shouldComponentUpdate(nextProps: Props) {
-        return nextProps.channelId !== this.props.channelId;
-    }
-
-    componentDidUpdate(nextProps: Props) {
-        this.getChannelData(get(nextProps, 'channelId'));
+    componentDidUpdate(prevProps: Props) {
+        if (prevProps.channelId !== this.props.channelId) {
+            this.getChannelData(get(this.props, 'channelId'));            
+        }
     }
 
     componentDidMount() {
@@ -43,7 +41,6 @@ const provideChannelData = (Component: React.ComponentClass<Props>) => {
             loadChannelById(this.props.channelId)(
                 (channelData: GoogleApiYouTubeChannelResource) =>
                     this.setState({channel: channelData}));
-                (channelData: GoogleApiYouTubeChannelResource) => this.setState({channel: channelData}));
         }    
     }
 
