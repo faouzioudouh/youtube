@@ -24,12 +24,13 @@ class FormatString extends React.Component<Props, State> {
         };
     }
 
-    shouldComponentUpdate(nextProps: Props) {
-        return nextProps.text !== this.props.text;
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
+        return nextProps.text !== this.props.text ||
+            nextState.output !== this.state.output;
     }
 
     componentDidUpdate() {
-        this.setState({output: formatString(this.props.text)});        
+        this.setState({output: formatString(this.props.text)});
     }
 
     render() {
