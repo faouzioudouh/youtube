@@ -5,7 +5,6 @@ import classnames from 'classnames';
 import { Props, State } from './Types';
 
 class Expander extends React.Component<Props, State> {
-    childrenText: string;
     refElement: HTMLDivElement;
     constructor(props: Props) {
         super(props);
@@ -13,6 +12,7 @@ class Expander extends React.Component<Props, State> {
         this.collapse = this.collapse.bind(this);
         this.expand = this.expand.bind(this);
         this.handleChildrenRef = this.handleChildrenRef.bind(this);
+        this.checkChildrenHeight = this.checkChildrenHeight.bind(this); 
 
         this.state = {
             expanded: true,
@@ -30,7 +30,19 @@ class Expander extends React.Component<Props, State> {
         this.setState({expanded: true});        
     }
 
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
+        return nextState.expanded !== this.state.expanded;
+    }
+
+    componentDidUpdate() {
+        this.checkChildrenHeight();            
+    }
+
     componentDidMount() {
+        this.checkChildrenHeight();
+    }
+
+    checkChildrenHeight() {
         const bounds = this.refElement.getBoundingClientRect();
         if (bounds.height > parseInt(this.props.collapsedHeight, 10)) {
             this.setState({
