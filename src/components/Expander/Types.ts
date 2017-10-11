@@ -12,4 +12,5 @@ export type Props = {
 export type State = {
     expanded: Boolean;
     collapsible: Boolean;
+    prevChildrenProps: ChildrenProps;
 };

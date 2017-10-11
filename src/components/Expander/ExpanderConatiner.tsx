@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classnames from 'classnames';
+import { isEqual } from 'lodash';
 
 // Types
 import { Props, State } from './Types';
@@ -16,7 +17,8 @@ class Expander extends React.Component<Props, State> {
 
         this.state = {
             expanded: true,
-            collapsible: false
+            collapsible: false,
+            prevChildrenProps: Object.assign({}, this.props.children.props)
         };
     }
 
@@ -26,16 +28,15 @@ class Expander extends React.Component<Props, State> {
     }
 
     expand (e: React.SyntheticEvent<EventTarget>) {
-        e.preventDefault();        
-        this.setState({expanded: true});        
+        e.preventDefault();
+        this.setState({expanded: true});
     }
 
-    shouldComponentUpdate(nextProps: Props, nextState: State) {
-        return nextState.expanded !== this.state.expanded;
-    }
-
-    componentDidUpdate() {
-        this.checkChildrenHeight();            
+    componentDidUpdate () {
+        if (!isEqual(this.props.children.props, this.state.prevChildrenProps)) {
+            this.checkChildrenHeight();
+            this.setState({prevChildrenProps: this.props.children.props});
+        }
     }
 
     componentDidMount() {
