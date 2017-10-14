@@ -1,11 +1,11 @@
 import * as React from 'react';
 import classnames from 'classnames';
+import { isEqual } from 'lodash';
 
 // Types
 import { Props, State } from './Types';
 
 class Expander extends React.Component<Props, State> {
-    childrenText: string;
     refElement: HTMLDivElement;
     constructor(props: Props) {
         super(props);
@@ -13,10 +13,12 @@ class Expander extends React.Component<Props, State> {
         this.collapse = this.collapse.bind(this);
         this.expand = this.expand.bind(this);
         this.handleChildrenRef = this.handleChildrenRef.bind(this);
+        this.checkChildrenHeight = this.checkChildrenHeight.bind(this); 
 
         this.state = {
             expanded: true,
-            collapsible: false
+            collapsible: false,
+            prevChildrenProps: Object.assign({}, this.props.children.props)
         };
     }
 
@@ -26,11 +28,22 @@ class Expander extends React.Component<Props, State> {
     }
 
     expand (e: React.SyntheticEvent<EventTarget>) {
-        e.preventDefault();        
-        this.setState({expanded: true});        
+        e.preventDefault();
+        this.setState({expanded: true});
+    }
+
+    componentDidUpdate () {
+        if (!isEqual(this.props.children.props, this.state.prevChildrenProps)) {
+            this.checkChildrenHeight();
+            this.setState({prevChildrenProps: this.props.children.props});
+        }
     }
 
     componentDidMount() {
+        this.checkChildrenHeight();
+    }
+
+    checkChildrenHeight() {
         const bounds = this.refElement.getBoundingClientRect();
         if (bounds.height > parseInt(this.props.collapsedHeight, 10)) {
             this.setState({

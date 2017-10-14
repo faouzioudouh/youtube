@@ -6,13 +6,15 @@ export {
   getVideosMetadata,
   getMostPopularVideos,
   getRelatedVideos,
-  loadChannelById
+  loadChannelById,
+  getVideoComments
 }
 
 const YOUTUBE_VIDEO = 'youtube#video';
 const YOUTUBE_SEARCH = 'search';
 const YOUTUBE_VIDEOS = 'videos';
 const YOUTUBE_CHANNELS = 'channels';
+const YOUTUBE_COMMENTS = 'commentThreads';
 
 /**
  * Load youtube iframe API
@@ -131,6 +133,10 @@ const youtubeSearchList = options => (TYPE = YOUTUBE_SEARCH) => callback => {
   return request.execute(callback);
 }
 
+/**
+ * 
+ * @param {*} channelId 
+ */
 const loadChannelById = channelId => callback => {
   const request = youtubeSearchList({
     id: channelId,
@@ -141,3 +147,14 @@ const loadChannelById = channelId => callback => {
     callback(response);
   });
 }
+
+const getVideoComments = videoId => callback => {  
+  const request = youtubeSearchList({
+    videoId: videoId,
+    part: 'snippet,replies',
+    type: null,
+  });
+
+  return request(YOUTUBE_COMMENTS)((response) => {
+    callback(response.items);
+  });}
