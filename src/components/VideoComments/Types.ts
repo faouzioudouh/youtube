@@ -16,17 +16,18 @@ interface CommentSnippet {
     viewerRating?: string;
 }
 
-interface Comment {
+export type Comment = {
     etag?: string;
     id?: string;
     kind?: string;
     snippet?: CommentSnippet;
-}
+};
 
 export type Props =  {
-    comments?: Array<Comment>;
+    comments?: Comment[];
+    video: GoogleApiYouTubeVideoResource;
 };
 
 export type State =  {
-    comments?: Array<Comment>;
+    comments?: Comment[];
 };

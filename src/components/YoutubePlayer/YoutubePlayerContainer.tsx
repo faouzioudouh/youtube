@@ -49,7 +49,7 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
 
   onPlayerReady({target}: Player) {
     this.player = target;
-    this.player.playVideo();
+    // this.player.playVideo();
     this.props.mostPopularVideosHandler();    
   }
 
