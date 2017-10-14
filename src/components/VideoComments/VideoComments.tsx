@@ -1,10 +1,17 @@
 import * as React from 'react';
-import { Props } from './Types';
+import { Props, Comment } from './Types';
+import VideoComment from './VideoComment';
 
-const VideoComments = (props: Props) => {
+const VideoComments: React.StatelessComponent<Props> = (props: Props) => {
     const { comments } = props;
+
+    const renderComments = (commentsToRender?: Comment[]) => {
+        return (commentsToRender || []).map( (comment: Comment)  => (
+            <VideoComment key={comment.id} {...comment} />
+        ));
+    };
     
-    return (<h1>HELLO COMMENTS {comments} </h1>);
-}
+    return (<div> {renderComments(comments)} </div>);
+};
 
 export default VideoComments;

@@ -3,7 +3,6 @@ import Header from './components/Header';
 import YoutubePlayer from './components/YoutubePlayer';
 import NextVideos from './components/NextVideos';
 import VideoDetails from './components/VideoDetails';
-import VideoComments from './components/VideoComments';
 import storeProvider from './hoc/storeProvider';
 import './App.css';
 
@@ -24,9 +23,6 @@ class App extends React.Component {
             <YoutubePlayer />
             <div className="VideoDetails__root-wrapper">
               <VideoDetails />
-            </div>
-            <div className="VideoComments__wrapper">
-              <VideoComments />
             </div>
           </div>
           <div className="Next-videos__wrapper">
