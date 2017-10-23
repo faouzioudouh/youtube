@@ -35,7 +35,7 @@ const VideoComment: React.StatelessComponent<Comment> = (props: Comment) => {
             </div>
         </div>
         <div className="Comment__body">
-            <Expander collapsedHeight="60" collapsedClass="colapsed" expandedClass="expanded">
+            <Expander collapsedHeight="50" collapsedClass="colapsed" expandedClass="expanded">
                 <FormatString text={textDisplay} tagName="p" />
             </Expander>
         </div>
