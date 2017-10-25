@@ -6,8 +6,10 @@ import VideoDetails from './components/VideoDetails';
 import storeProvider from './hoc/storeProvider';
 import './App.css';
 
+const logo = require('./logo.png');
+
 const logoProps = {
-  src: './logo.png',
+  src: logo,
   alt: "Youtubx's respository on Github",
   width: 146
 };

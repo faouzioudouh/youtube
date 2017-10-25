@@ -46312,7 +46312,7 @@ var __extends = (this && this.__extends) || (function () {
 
 
 var logoProps = {
-    src: './logo.png',
+    src: './static/images/logo.png',
     alt: "Youtubx's respository on Github",
     width: 146
 };
@@ -48007,4 +48007,4 @@ module.exports = __webpack_require__(112);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.68f0569f.js.map
+//# sourceMappingURL=main.16746596.js.map
