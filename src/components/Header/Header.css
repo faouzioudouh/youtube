@@ -6,10 +6,9 @@
     z-index: 2020;
     margin: 0 auto;
     height: 50px;
-    background-color: #3a3f41;
+    background-color: #333330;
 }
 
-.Header__Link,
 .Header__search-input {
     display: inline-block;
     padding-top: 8px;

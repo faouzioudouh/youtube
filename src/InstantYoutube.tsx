@@ -7,8 +7,14 @@ import storeProvider from './hoc/storeProvider';
 import './App.css';
 
 const logoProps = {
-  src: 'http://ytinstant.com/images/logo3.png',
-  alt: 'Instant youtube'
+  src: 'logo.png',
+  alt: "Youtubx's respository on Github",
+  width: 146
+};
+
+const homeLinkProps =  {
+  href: 'https://github.com/faouzioudouh/youtube',
+  target: '_blank'
 };
 
 class App extends React.Component {
@@ -16,7 +22,7 @@ class App extends React.Component {
     return (
       <div className="InstantYoutube">
         <div className="header__root-wrapper">
-          <Header logo={logoProps} linkHome={'https://google.com'}  />
+          <Header logo={logoProps} linkHome={homeLinkProps}  />
         </div>
         <main id="main">
           <div className="Video-player__wrapper">
