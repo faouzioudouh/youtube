@@ -20992,11 +20992,6 @@ const loadYouTubeIframeAPI = (
   onPlayerStateChange,
   currentVideoId) => {
 
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
     const onYouTubeIframeAPIReady = () => {
       return new YT.Player('YoutubePlayer', {
         height: '405',
@@ -46320,8 +46315,13 @@ var __extends = (this && this.__extends) || (function () {
 
 
 var logoProps = {
-    src: 'http://ytinstant.com/images/logo3.png',
-    alt: 'Instant youtube'
+    src: 'logo.png',
+    alt: "Youtubx's respository on Github",
+    width: 146
+};
+var homeLinkProps = {
+    href: 'https://github.com/faouzioudouh/youtube',
+    target: '_blank'
 };
 var App = (function (_super) {
     __extends(App, _super);
@@ -46331,7 +46331,7 @@ var App = (function (_super) {
     App.prototype.render = function () {
         return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "InstantYoutube" },
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "header__root-wrapper" },
-                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1__components_Header__["a" /* default */], { logo: logoProps, linkHome: 'https://google.com' })),
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1__components_Header__["a" /* default */], { logo: logoProps, linkHome: homeLinkProps })),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("main", { id: "main" },
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "Video-player__wrapper" },
                     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_2__components_YoutubePlayer__["a" /* default */], null),
@@ -46555,8 +46555,8 @@ var Header = function (_a) {
     };
     return (__WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("div", { className: "Header" },
         __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("div", { className: "Component__container" },
-            __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("a", { href: linkHome, className: "Header__Link" },
-                __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("img", { className: "Header__logo", src: logo.src, alt: logo.alt })),
+            __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("a", __assign({}, linkHome, { className: "Header__Link" }),
+                __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("img", __assign({ className: "Header__logo" }, logo))),
             __WEBPACK_IMPORTED_MODULE_1_react__["createElement"]("div", { className: "Header__search-input" },
                 __WEBPACK_IMPORTED_MODULE_1_react__["createElement"](__WEBPACK_IMPORTED_MODULE_2__Input__["a" /* default */], __assign({}, inputProps))))));
 };
@@ -48116,4 +48116,4 @@ module.exports = __webpack_require__(112);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.dec1e690.js.map
+//# sourceMappingURL=main.5e717daa.js.map
