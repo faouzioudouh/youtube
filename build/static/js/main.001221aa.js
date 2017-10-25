@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 288);
+/******/ 	return __webpack_require__(__webpack_require__.s = 289);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -28117,7 +28117,7 @@ if (typeof Promise === 'undefined') {
 }
 
 // fetch() polyfill for making API calls.
-__webpack_require__(287);
+__webpack_require__(288);
 
 // Object.assign() is commonly used with React.
 // It will use the native implementation if it's present and isn't buggy.
@@ -46311,8 +46311,9 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+var logo = __webpack_require__(287);
 var logoProps = {
-    src: './static/images/logo.png',
+    src: logo,
     alt: "Youtubx's respository on Github",
     width: 146
 };
@@ -47534,6 +47535,12 @@ var currentStore = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__configureS
 /* 287 */
 /***/ (function(module, exports) {
 
+module.exports = "data:image/png;base64,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"
+
+/***/ }),
+/* 288 */
+/***/ (function(module, exports) {
+
 (function(self) {
   'use strict';
 
@@ -47998,7 +48005,7 @@ var currentStore = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__configureS
 
 
 /***/ }),
-/* 288 */
+/* 289 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(111);
@@ -48007,4 +48014,4 @@ module.exports = __webpack_require__(112);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.16746596.js.map
+//# sourceMappingURL=main.001221aa.js.map
