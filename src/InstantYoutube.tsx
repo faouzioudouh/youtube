@@ -7,7 +7,7 @@ import storeProvider from './hoc/storeProvider';
 import './App.css';
 
 const logoProps = {
-  src: 'logo.png',
+  src: './logo.png',
   alt: "Youtubx's respository on Github",
   width: 146
 };
