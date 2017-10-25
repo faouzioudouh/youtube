@@ -18,8 +18,14 @@
   </span>
   <script>
     function googleApiInit() {
+      // Load youtube Ifram API
       gapi.client.setApiKey('AIzaSyDhD0zoAfEUi1b0WXhZRlsrkeAf1SGjB7w');
-      gapi.client.load('youtube', 'v3');
+      gapi.client.load('youtube', 'v3').then(function() {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      });
     }
   </script>
 

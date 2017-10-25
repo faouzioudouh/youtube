@@ -27,11 +27,6 @@ const loadYouTubeIframeAPI = (
   onPlayerStateChange,
   currentVideoId) => {
 
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
     const onYouTubeIframeAPIReady = () => {
       return new YT.Player('YoutubePlayer', {
         height: '405',
