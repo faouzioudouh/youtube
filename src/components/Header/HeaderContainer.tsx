@@ -9,11 +9,17 @@ import { searchTextUpdated } from '../../actions/searchText';
 type Logo = {
     src: string;
     alt: string;
+    width: number;
+};
+
+type Link = {
+    href: string;
+    target: string;
 };
 
 interface Props {
     logo: Logo;
-    linkHome: string;
+    linkHome: Link;
     handleSearchTextChanges: (text: string) => { type: string; text: string; };
 }
 

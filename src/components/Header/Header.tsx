@@ -5,11 +5,17 @@ import Input from '../Input';
 type Logo = {
     src: string;
     alt: string;
-  };
+    width: number;
+};
+
+type Link = {
+    href: string;
+    target: string;
+};
   
 interface Props {
     logo: Logo;
-    linkHome: string;
+    linkHome: Link;
     handleSerachKeywordChange: (event: React.FormEvent<HTMLInputElement>) => void;
     searchKeyword: string;
 }
@@ -31,13 +37,12 @@ return (
     <div className="Header">
         <div className="Component__container">
             <a
-                href={linkHome}
+                {...linkHome}
                 className="Header__Link"
             >
                 <img
                     className="Header__logo"
-                    src={logo.src}
-                    alt={logo.alt}
+                    {...logo}
                 />
             </a>
             <div className="Header__search-input">
