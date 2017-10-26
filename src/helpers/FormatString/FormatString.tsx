@@ -11,8 +11,7 @@ interface State {
 }
 
 const formatString = (text: string): string => {
-    const output = anchorme(text);
-    return output.replace(/(?:\r\n|\r|\n)/g, '<br />');
+   return anchorme(text);
 };
 
 class FormatString extends React.Component<Props, State> {

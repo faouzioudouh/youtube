@@ -5,6 +5,9 @@ import { isEqual } from 'lodash';
 // Types
 import { Props, State } from './Types';
 
+//Styles
+import './Exapnder.css';
+
 class Expander extends React.Component<Props, State> {
     refElement: HTMLDivElement;
     constructor(props: Props) {
@@ -78,7 +81,7 @@ class Expander extends React.Component<Props, State> {
         }
 
         const classNames = classnames(
-            'Expande__wrapper', {
+            'Expander__wrapper', {
             [this.props.collapsedClass]: !this.state.expanded,
             [this.props.expandedClass]: !!this.state.expanded
         });

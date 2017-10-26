@@ -1,0 +1,9 @@
+.Expander__wrapper > * {
+    margin: 0;
+    padding: 0;
+    word-wrap: break-word;
+    min-width: 0;
+    line-height: 1.7rem;
+    font-size: 0.9rem;
+    white-space: pre-wrap;
+}
