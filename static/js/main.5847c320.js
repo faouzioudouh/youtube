@@ -20994,8 +20994,8 @@ const loadYouTubeIframeAPI = (
 
     const onYouTubeIframeAPIReady = () => {
       return new YT.Player('YoutubePlayer', {
-        height: '405',
-        width: '720',
+        height: '480',
+        width: '854',
         videoId: currentVideoId,
         playerVars: {
           autoplay: 0,
@@ -28076,6 +28076,7 @@ var searchTextUpdated = function (text) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formatNumber; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return formatNumberCommas; });
 var ranges = [
     { divider: 1e9, suffix: 'B' },
     { divider: 1e6, suffix: 'M' },
@@ -28088,6 +28089,9 @@ var formatNumber = function (n) {
         }
     }
     return n && n.toString();
+};
+var formatNumberCommas = function (n) {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 };
 
 
@@ -46452,7 +46456,7 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
-//Styles
+// Styles
 
 var Expander = (function (_super) {
     __extends(Expander, _super);
@@ -46519,12 +46523,12 @@ var Expander = (function (_super) {
             _a[this.props.collapsedClass] = !this.state.expanded,
             _a[this.props.expandedClass] = !!this.state.expanded,
             _a));
-        return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", null,
+        return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "Expander" },
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: classNames, ref: this.handleChildrenRef, style: divStyle }, children),
             this.state.collapsible ?
                 (this.state.expanded ?
-                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("a", { href: "#", onClick: this.collapse, className: "Expander__collapse" }, "show less") :
-                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("a", { href: "#", onClick: this.expand, className: "Expander__expand" }, "show more")) :
+                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("a", { href: "#", onClick: this.collapse, className: "Expander__controls Expander__controls--collapse" }, "show less") :
+                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("a", { href: "#", onClick: this.expand, className: "Expander__controls Expander__controls--expand" }, "show more")) :
                 null));
         var _a;
     };
@@ -46808,7 +46812,7 @@ var VideoCard = function (_a) {
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("span", { className: "VideoCard__channel-title" }, channelTitle),
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("span", { className: "VideoCard__view-count" },
                     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__libs_formatNumber__["a" /* formatNumber */])(viewCount),
-                    " Views")))));
+                    " views")))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (VideoCard);
 
@@ -47016,9 +47020,9 @@ var VideoCommentsContainer = (function (_super) {
         };
         return _this;
     }
-    VideoCommentsContainer.prototype.shouldComponentUpdate = function (nextProps) {
-        return nextProps.video.id !== this.props.video.id;
-    };
+    // shouldComponentUpdate(nextProps: Props) {
+    //     return nextProps.video.id !== this.props.video.id;
+    // }
     VideoCommentsContainer.prototype.componentDidUpdate = function () {
         this.getVideoComments(this.props.video.id);
     };
@@ -47094,23 +47098,25 @@ var VideoDetails = function (_a) {
     };
     return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails" },
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails__title" },
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h3", null,
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h1", null,
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("span", null, title))),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails__metadata" },
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails__metadata-views-count" },
-                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("span", { "aria-label": viewCount + " Views" },
-                    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__libs_formatNumber__["a" /* formatNumber */])(viewCount),
-                    " VIEWS")),
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("span", null,
+                    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__libs_formatNumber__["b" /* formatNumberCommas */])(viewCount),
+                    " views")),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails__metadata-reactions" },
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("span", null,
                     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__libs_formatNumber__["a" /* formatNumber */])(likeCount),
-                    " Likes | ",
+                    " likes | ",
                     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__libs_formatNumber__["a" /* formatNumber */])(dislikeCount),
-                    " Dislikes"))),
+                    " dislikes"))),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails__description" },
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_3__ChannelCard__["a" /* default */], __assign({}, ChannelProps)),
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5__components_Expander__["a" /* default */], { collapsedHeight: "60", collapsedClass: "colapsed", expandedClass: "expanded" },
-                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_4__helpers_FormatString__["a" /* default */], { text: description, tagName: "p" }))),
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails__description-user-card" },
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_3__ChannelCard__["a" /* default */], __assign({}, ChannelProps))),
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoDetails__description-details" },
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5__components_Expander__["a" /* default */], { collapsedHeight: "60", collapsedClass: "colapsed", expandedClass: "expanded" },
+                    __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_4__helpers_FormatString__["a" /* default */], { text: description, tagName: "p" })))),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoComments__wrapper" },
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_6__components_VideoComments__["a" /* default */], { video: video }))));
 };
@@ -48023,4 +48029,4 @@ module.exports = __webpack_require__(112);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.19ac41f4.js.map
+//# sourceMappingURL=main.5847c320.js.map
