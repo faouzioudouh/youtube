@@ -1,3 +1,13 @@
+.VideoDetails__title h1 {
+    margin: 0;
+    display: block;
+    max-height: 4.8rem;
+    overflow: hidden;
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 2.4rem;
+}
+
 .VideoDetails__metadata {
     display: table;
     width: 100%;
@@ -34,4 +44,8 @@
     display: inline-block;
     cursor: pointer;
     text-decoration: none;
+ }
+
+ .VideoDetails__description-details {
+    padding-left: 63px;    
  }

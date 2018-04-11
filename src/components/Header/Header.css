@@ -5,8 +5,13 @@
     width: 100%;
     z-index: 2020;
     margin: 0 auto;
-    height: 50px;
+    height: 56px;
     background-color: #333330;
+}
+
+.Component__container {
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .Header__search-input {

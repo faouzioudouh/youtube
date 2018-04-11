@@ -10,7 +10,7 @@ const VideoComments: React.StatelessComponent<Props> = (props: Props) => {
             <VideoComment key={comment.id} {...comment} />
         ));
     };
-    
+
     return (<div> {renderComments(comments)} </div>);
 };
 

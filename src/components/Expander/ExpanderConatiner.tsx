@@ -5,7 +5,7 @@ import { isEqual } from 'lodash';
 // Types
 import { Props, State } from './Types';
 
-//Styles
+// Styles
 import './Exapnder.css';
 
 class Expander extends React.Component<Props, State> {
@@ -87,15 +87,15 @@ class Expander extends React.Component<Props, State> {
         });
 
         return (
-            <div>
+            <div className="Expander">
                 <div className={classNames} ref={this.handleChildrenRef} style={divStyle}>
                     {children}
                 </div>
 
                 {this.state.collapsible ?
                     (this.state.expanded ?
-                    <a href="#" onClick={this.collapse} className="Expander__collapse">show less</a> :
-                    <a href="#" onClick={this.expand} className="Expander__expand">show more</a>) :
+                    <a href="#" onClick={this.collapse} className="Expander__controls Expander__controls--collapse">show less</a> :
+                    <a href="#" onClick={this.expand} className="Expander__controls Expander__controls--expand">show more</a>) :
                     null
                 }
             </div>

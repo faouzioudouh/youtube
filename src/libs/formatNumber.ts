@@ -13,3 +13,8 @@ export const formatNumber = (n: number) => {
     }
     return n && n.toString();
 };
+
+export const formatNumberCommas = (n: number) => {
+    return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+};
+

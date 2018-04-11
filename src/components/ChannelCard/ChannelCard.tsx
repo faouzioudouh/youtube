@@ -20,7 +20,7 @@ class ChannelCard extends React.Component<Props> {
 
         const {publishedAt} = this.props;
         const title: string = get(channel, 'snippet.title');
-        const thumbnailUrl: string = get(channel, "snippet.thumbnails['default'].url");
+        const thumbnailUrl: string = get(channel, `snippet.thumbnails['default'].url`);
         const channelUrl: string = `https://www.youtube.com/channel/${channel.id}`;
 
         return (

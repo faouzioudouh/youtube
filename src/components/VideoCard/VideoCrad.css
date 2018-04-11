@@ -1,14 +1,15 @@
 .VideoCard {
-    display: table;
+    display: flex;
 }
 
 .VideoCard__list {
     margin: 0;
+    padding-left: 24px;
 }
 
 .VideoCard__list-item {
     list-style: none;
-    margin-bottom: 10px;    
+    padding-bottom: 8px;    
 }
 
 .VideoCard__list-item--current {
@@ -19,17 +20,19 @@
     margin-bottom: 0;
 }
 
+.VideoCard__metadata {
+    width: 220px;
+}
+
 .VideoCard__thumbnail,
 .VideoCard__metadata {
-    display: table-cell;
-    vertical-align: top;
     cursor: pointer;
 }
 
 .VideoCard__thumbnail {
     margin-right: 8px;
     height: 94px;
-    width: 130px;
+    width: 120px;
 }
 
 .VideoCard__video-title {
@@ -37,7 +40,7 @@
     margin: 0 0 4px 0;
     max-height: 3.3rem;
     overflow: hidden;
-    font-size: 1rem;
+    font-size: .88rem;
     font-weight: 500;
 }
 
@@ -47,8 +50,8 @@
 
 .VideoCard__channel-title,
 .VideoCard__view-count {
-    font-size: .75rem;
-    line-height: .9rem;
+    font-size: .81rem;
+    line-height: 1.1rem;
     padding: 1px 0;
     overflow-x: hidden;
     text-overflow: ellipsis;

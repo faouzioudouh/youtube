@@ -46,7 +46,7 @@ const VideoCard = ({video, handleVideoClick, className}: Props) => {
                         {channelTitle}
                     </span>
                     <span className="VideoCard__view-count">
-                        {formatNumber(viewCount)} Views
+                        {formatNumber(viewCount)} views
                     </span>
                 </div>
             </div>

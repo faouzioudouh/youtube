@@ -2,13 +2,13 @@
 main {
   max-width: 1070px;
   margin: 70px auto 0;
-  display: table;
+  display: flex;
+  justify-content: center;
 }
 
 .Video-player__wrapper,
 .Next-videos__wrapper {
-  display: table-cell;
-  vertical-align: top;
+  /* flex: 1; */
 }
 
 .Component__container {
@@ -16,5 +16,4 @@ main {
   max-width: 1070px;
   margin-left: auto;
   margin-right: auto;
-  margin-bottom: 20px;
 }

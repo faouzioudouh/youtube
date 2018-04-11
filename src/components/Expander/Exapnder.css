@@ -1,9 +1,28 @@
+.Expander__wrapper {
+    white-space: pre-wrap;
+}
+
 .Expander__wrapper > * {
     margin: 0;
     padding: 0;
     word-wrap: break-word;
     min-width: 0;
-    line-height: 1.7rem;
-    font-size: 0.9rem;
-    white-space: pre-wrap;
+    line-height: 1.25rem;
+    font-size: 0.85rem;
+}
+
+.Expander__wrapper a {
+    color: rgb(39, 147, 230);
+
+}
+
+.Expander__controls {
+    color: rgba(17, 17, 17, 0.6);
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .007px;
+    text-transform: uppercase;
 }

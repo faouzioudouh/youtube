@@ -1,4 +1,6 @@
-
+.Comment {
+    margin-bottom: 16px;
+}
 .Comment .ChannelCard {
     margin: 0;
 }

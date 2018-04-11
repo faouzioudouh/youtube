@@ -29,8 +29,8 @@ const loadYouTubeIframeAPI = (
 
     const onYouTubeIframeAPIReady = () => {
       return new YT.Player('YoutubePlayer', {
-        height: '405',
-        width: '720',
+        height: '480',
+        width: '854',
         videoId: currentVideoId,
         playerVars: {
           autoplay: 0,
