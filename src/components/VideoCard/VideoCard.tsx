@@ -21,7 +21,7 @@ const VideoCard = ({video, handleVideoClick, className}: Props) => {
     const { viewCount } = statistics;
     
     /* tslint:disable:no-string-literal */
-    const defaultThumbnail = thumbnails['default'];
+    const mediumThumbnail = thumbnails['medium'];
 
     return (
         <li
@@ -32,9 +32,8 @@ const VideoCard = ({video, handleVideoClick, className}: Props) => {
             <div className={classNames}>
                 <div className="VideoCard__thumbnail">
                     <img
-                        src={defaultThumbnail.url}
-                        width={defaultThumbnail.width}
-                        height={defaultThumbnail.height}
+                        src={mediumThumbnail.url}
+                        width="168"
                         alt={title}
                     />
                 </div>
