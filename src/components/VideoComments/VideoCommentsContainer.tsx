@@ -12,17 +12,13 @@ class VideoCommentsContainer extends React.Component<Props, State> {
 
         this.getVideoComments = this.getVideoComments.bind(this);
         this.state = {
-            comments: undefined
+            comments: undefined,
+            isLoading: false,
         };
     }
 
-    shouldComponentUpdate(nextProps: Props, nextSatet: State) {
-        return (nextProps.video.id !== this.props.video.id) ||
-            (Boolean(nextSatet.comments) !== Boolean(this.state.comments));
-    }
-
-    componentDidUpdate() {
-        this.getVideoComments(this.props.video.id);
+    componentWillReceiveProps(newProps: Props) {
+        this.getVideoComments(newProps.video.id);
     }
 
     componentDidMount() {
@@ -30,8 +26,12 @@ class VideoCommentsContainer extends React.Component<Props, State> {
     }
 
     getVideoComments(videoId: string) {
+        this.setState({ isLoading: true });
         getVideoComments(videoId)((comments: Comment[]) => {
-            this.setState({comments});
+            this.setState({
+                comments,
+                isLoading: false
+            });
         });
     }
 

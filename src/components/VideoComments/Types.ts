@@ -30,4 +30,5 @@ export type Props =  {
 
 export type State =  {
     comments?: Comment[];
+    isLoading: boolean; 
 };

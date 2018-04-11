@@ -97,14 +97,14 @@ class Expander extends React.Component<Props, State> {
                     <a
                         href="#"
                         onClick={this.collapse}
-                        className="Expander__controls Expander__controls--collapse"
+                        className="Expander__controls collapse"
                     >
                         show less
                     </a> :
                     <a
                         href="#"
                         onClick={this.expand}
-                        className="Expander__controls Expander__controls--expand"
+                        className="Expander__controls expand"
                     >
                         show more
                     </a>) :
