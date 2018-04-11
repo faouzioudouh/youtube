@@ -7,11 +7,19 @@ interface Props {
 }
 
 const YTime = ({date, format}: Props) => {
+    let outputTime;
     if (!date) {
         return null;
     }
 
-    const outputTime = moment(date).format(format);
+    switch(format) {
+        case 'fromNow':
+            outputTime = moment(date).fromNow();
+            break;
+        default:
+            outputTime = moment(date).format(format);
+    }
+
     return (
         <time className="YTime">
             {outputTime}

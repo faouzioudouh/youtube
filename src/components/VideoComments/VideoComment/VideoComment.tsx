@@ -28,7 +28,7 @@ const VideoComment: React.StatelessComponent<Comment> = (props: Comment) => {
                     <a href={authorChannelUrl} title={authorDisplayName} className="ChannelCard__link">
                         {authorDisplayName}
                         <span className="ChannelCard__video-publish-date">
-                            <YTime date={publishedAt} format="LL" />
+                            <YTime date={publishedAt} format="fromNow" />
                         </span>
                     </a>
                 </div>
