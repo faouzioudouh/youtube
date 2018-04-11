@@ -16,9 +16,9 @@ class VideoCommentsContainer extends React.Component<Props, State> {
         };
     }
 
-    // shouldComponentUpdate(nextProps: Props) {
-    //     return nextProps.video.id !== this.props.video.id;
-    // }
+    shouldComponentUpdate(nextProps: Props, nextSatet: State) {
+        return (nextProps.video.id !== this.props.video.id) || (Boolean(nextSatet.comments) != Boolean(this.state.comments));
+    }
 
     componentDidUpdate() {
         this.getVideoComments(this.props.video.id);
