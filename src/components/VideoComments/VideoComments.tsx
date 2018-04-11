@@ -3,7 +3,7 @@ import { Props, Comment } from './Types';
 import VideoComment from './VideoComment';
 
 const VideoComments: React.StatelessComponent<Props> = (props: Props) => {
-    const { comments } = props;
+    const { comments, handleRef } = props;
 
     const renderComments = (commentsToRender?: Comment[]) => {
         return (commentsToRender || []).map( (comment: Comment)  => (
@@ -11,7 +11,7 @@ const VideoComments: React.StatelessComponent<Props> = (props: Props) => {
         ));
     };
 
-    return (<div> {renderComments(comments)} </div>);
+    return (<div ref={(node) => handleRef(node)}> {renderComments(comments)} </div>);
 };
 
 export default VideoComments;

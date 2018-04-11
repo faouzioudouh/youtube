@@ -144,13 +144,14 @@ const loadChannelById = channelId => callback => {
   });
 }
 
-const getVideoComments = videoId => callback => {  
+const getVideoComments = (videoId, pageToken) => callback => {  
   const request = youtubeSearchList({
     videoId: videoId,
     part: 'snippet,replies',
     type: null,
+    pageToken
   });
 
   return request(YOUTUBE_COMMENTS)((response) => {
-    callback(response.items);
+  callback(response);
   });}

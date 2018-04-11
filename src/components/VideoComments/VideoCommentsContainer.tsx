@@ -1,42 +1,76 @@
 import * as React from 'react';
-import { Props, State, Comment } from './Types';
 
+import { PropsContainer as Props, State, CommentsThread } from './Types';
 import  { getVideoComments } from '../../libs/youtubeHelper.js';
-  
-// Video Comments
 import VideoComments from './VideoComments';
+import Loader from '../Loader';
+
+let scrollComponent: HTMLElement;
 
 class VideoCommentsContainer extends React.Component<Props, State> {
     constructor(props: Props) {
         super(props);
 
         this.getVideoComments = this.getVideoComments.bind(this);
+        this.scrollListener = this.scrollListener.bind(this);
+
         this.state = {
-            comments: undefined,
+            comments: [],
             isLoading: false,
+            nextPageToken: '',
         };
     }
 
     componentWillReceiveProps(newProps: Props) {
+        this.setState({ comments: [] });
         this.getVideoComments(newProps.video.id);
     }
 
     componentDidMount() {
         this.getVideoComments(this.props.video.id);
+        this.attachScrollListener();    
     }
 
-    getVideoComments(videoId: string) {
+    attachScrollListener() {
+        window.addEventListener('scroll', this.scrollListener);
+        window.addEventListener('resize', this.scrollListener);
+    }
+    
+    scrollListener() {
+        if (!this.state.nextPageToken || this.state.isLoading) {
+            return;
+        }
+
+       const rect = scrollComponent.getBoundingClientRect();
+        if (rect.bottom <= (window.innerHeight || document.documentElement.clientHeight)) {
+            this.getVideoComments(this.props.video.id, this.state.nextPageToken);
+        }
+    }
+
+    handleRef(node: HTMLElement) {
+        if (node) {
+            scrollComponent = node;
+        }
+    }
+
+    getVideoComments(videoId: string, pageToken?: string) {        
         this.setState({ isLoading: true });
-        getVideoComments(videoId)((comments: Comment[]) => {
+        getVideoComments(videoId, pageToken)((res: CommentsThread) => {
             this.setState({
-                comments,
-                isLoading: false
+                comments: this.state.comments!.concat(res.items),
+                isLoading: false,
+                nextPageToken: res.nextPageToken
             });
         });
     }
 
     render() {
-        return (<VideoComments {...this.props}  comments={this.state.comments} />);
+        return (
+        <div>
+            <VideoComments {...this.props}  comments={this.state.comments} handleRef={this.handleRef} />
+            {this.state.isLoading ? <Loader classnames="comments__loader" /> : null}
+        </div>
+        );
     }
 }
 

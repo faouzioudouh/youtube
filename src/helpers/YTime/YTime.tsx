@@ -12,7 +12,7 @@ const YTime = ({date, format}: Props) => {
         return null;
     }
 
-    switch(format) {
+    switch (format) {
         case 'fromNow':
             outputTime = moment(date).fromNow();
             break;

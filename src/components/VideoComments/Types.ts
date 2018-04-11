@@ -23,12 +23,24 @@ export type Comment = {
     snippet?: CommentSnippet;
 };
 
+export type CommentsThread = {
+    items: Comment[],
+    nextPageToken: string
+}
+
 export type Props =  {
+    comments?: Comment[];
+    video: GoogleApiYouTubeVideoResource;
+    handleRef: Function;
+};
+
+export type PropsContainer =  {
     comments?: Comment[];
     video: GoogleApiYouTubeVideoResource;
 };
 
 export type State =  {
     comments?: Comment[];
-    isLoading: boolean; 
+    isLoading: boolean;
+    nextPageToken: string;
 };

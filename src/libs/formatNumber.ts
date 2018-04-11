@@ -19,10 +19,12 @@ export const formatNumberCommas = (n: number) => {
 };
 
 export const formatDuration = (duraction: string) => {
-    const array = duraction.match(/(\d+)(?=[MHS])/ig)||[]; 
+    const array = duraction.match(/(\d+)(?=[MHS])/ig) || []; 
     var formatted = array.map((item: string) => {
-        if (item.length < 2) return `0${item}`;
+        if (item.length < 2) {
+            return `0${item}`;
+        }
         return item;
     }).join(':');
     return formatted;
-}
+};
