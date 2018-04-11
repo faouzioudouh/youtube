@@ -122,6 +122,7 @@ const youtubeSearchList = options => (TYPE = YOUTUBE_SEARCH) => callback => {
   const mergedOptions = Object.assign({}, {
     type: 'video',
     part: 'id',
+    maxResults: 10
   }, options);
 
   const request = gapi.client.youtube[TYPE].list(mergedOptions);

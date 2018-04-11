@@ -94,8 +94,20 @@ class Expander extends React.Component<Props, State> {
 
                 {this.state.collapsible ?
                     (this.state.expanded ?
-                    <a href="#" onClick={this.collapse} className="Expander__controls Expander__controls--collapse">show less</a> :
-                    <a href="#" onClick={this.expand} className="Expander__controls Expander__controls--expand">show more</a>) :
+                    <a
+                        href="#"
+                        onClick={this.collapse}
+                        className="Expander__controls Expander__controls--collapse"
+                    >
+                        show less
+                    </a> :
+                    <a
+                        href="#"
+                        onClick={this.expand}
+                        className="Expander__controls Expander__controls--expand"
+                    >
+                        show more
+                    </a>) :
                     null
                 }
             </div>
