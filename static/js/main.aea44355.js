@@ -47020,9 +47020,9 @@ var VideoCommentsContainer = (function (_super) {
         };
         return _this;
     }
-    // shouldComponentUpdate(nextProps: Props) {
-    //     return nextProps.video.id !== this.props.video.id;
-    // }
+    VideoCommentsContainer.prototype.shouldComponentUpdate = function (nextProps, nextSatet) {
+        return (nextProps.video.id !== this.props.video.id) || (Boolean(nextSatet.comments) != Boolean(this.state.comments));
+    };
     VideoCommentsContainer.prototype.componentDidUpdate = function () {
         this.getVideoComments(this.props.video.id);
     };
@@ -48029,4 +48029,4 @@ module.exports = __webpack_require__(112);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.5847c320.js.map
+//# sourceMappingURL=main.aea44355.js.map
