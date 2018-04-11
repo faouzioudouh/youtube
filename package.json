@@ -21,12 +21,16 @@
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
     "react-scripts-ts": "2.6.0",
-    "redux-thunk": "^2.2.0"
+    "redux-thunk": "^2.2.0",
+    "urijs": "^1.19.1"
   },
   "scripts": {
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
+  },
+  "devDependencies": {
+    "@types/urijs": "^1.15.37"
   }
 }

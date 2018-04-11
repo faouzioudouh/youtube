@@ -3,9 +3,9 @@ import Loader from '../Loader';
 
 const YoutubePlayer = () => {
     return (
-    <div id="YoutubePlayer" className="Component__container">
-        <Loader />
-    </div>);
+        <div id="YoutubePlayer" className="Component__container">
+            <Loader />
+        </div>);
 };
 
 export default YoutubePlayer;
