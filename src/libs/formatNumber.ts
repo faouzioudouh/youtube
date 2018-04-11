@@ -17,3 +17,12 @@ export const formatNumber = (n: number) => {
 export const formatNumberCommas = (n: number) => {
     return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 };
+
+export const formatDuration = (duraction: string) => {
+    const array = duraction.match(/(\d+)(?=[MHS])/ig)||[]; 
+    var formatted = array.map((item: string) => {
+        if (item.length < 2) return `0${item}`;
+        return item;
+    }).join(':');
+    return formatted;
+}

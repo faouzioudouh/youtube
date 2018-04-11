@@ -30,6 +30,7 @@
 }
 
 .VideoCard__thumbnail {
+    position: relative;
     margin-right: 8px;
     height: 94px;
     width: 168px;
@@ -58,4 +59,20 @@
     white-space: nowrap;
     display: flex;
     color: #8c8c8c
+}
+
+.VideoCard__duration {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    margin: 4px;
+    color: hsl(0, 0%, 100%);
+    background-color: hsl(0, 0%, 6.7%);
+    opacity: .8;
+    padding: 2px 4px;
+    border-radius: 2px;
+    letter-spacing: .5px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 12px;
 }

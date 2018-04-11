@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as classnames from 'classnames';
 
-import { formatNumber } from '../../libs/formatNumber';
+import { formatNumber, formatDuration } from '../../libs/formatNumber';
 import './VideoCrad.css';
 
 interface Props {
@@ -16,9 +16,10 @@ const VideoCard = ({video, handleVideoClick, className}: Props) => {
         return null;
     }
 
-    const { id, snippet, statistics } = video;
+    const { id, snippet, statistics, contentDetails } = video;
     const { thumbnails, title, channelTitle } = snippet;
     const { viewCount } = statistics;
+    const { duration } = contentDetails;
     
     /* tslint:disable:no-string-literal */
     const mediumThumbnail = thumbnails['medium'];
@@ -36,6 +37,9 @@ const VideoCard = ({video, handleVideoClick, className}: Props) => {
                         width="168"
                         alt={title}
                     />
+                    <span className="VideoCard__duration">
+                        {formatDuration(duration)}
+                    </span>
                 </div>
                 <div className="VideoCard__metadata">
                     <h3 className="VideoCard__video-title-wrapper">
