@@ -1,5 +1,5 @@
 /**
- * @module  actions/SearchText
+ * @module  actions/Youtube
  */
 
 /**
@@ -33,8 +33,8 @@ export const setYoutubeVideos = (videos: Array<GoogleApiYouTubeVideoResource>) =
 });
 
 export const currentVideo = (video: GoogleApiYouTubeVideoResource) => ({
-        type: CURRENT_VIDEO,
-        video: video
+    type: CURRENT_VIDEO,
+    video: video
 });
 
 export const loadChannel = (channel: GoogleApiYouTubeChannelResource) => ({

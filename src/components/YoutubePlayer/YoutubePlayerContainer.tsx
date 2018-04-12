@@ -5,6 +5,7 @@ import { Dispatch } from 'redux';
 import YoutubePlayer from './YoutubePlayer';
 import { currentVideo as currentVideoAction, YoutubeAction } from '../../actions/youtube';
 import { Props, Player, TState, DispatchFromProps } from './types';
+import { getRelatedVideos, getVideoById } from '../../libs/youtubeHelper.js';
 
 import  {
   loadYouTubeIframeAPI,
@@ -17,8 +18,8 @@ import { getVideoId } from '../../libs/common';
 class YoutubePlayerContainer extends React.Component<Props, {}> {
   player: Player;
 
-  constructor() {
-    super();
+  constructor(props: Props) {
+    super(props);
 
     this.onPlayerReady = this.onPlayerReady.bind(this);
     this.onPlayerStateChange = this.onPlayerStateChange.bind(this);
@@ -29,7 +30,7 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
     loadYouTubeIframeAPI(
       this.onPlayerReady,
       this.onPlayerStateChange,
-      this.props.searchText);
+      this.props.urlVideoId);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -43,14 +44,20 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
     }
   }
 
-  playVideo(video: GoogleApiYouTubeVideoResource) {
-    this.player.loadVideoById(getVideoId(video));    
-  }
-
   onPlayerReady({target}: Player) {
     this.player = target;
-    // this.player.playVideo();
-    this.props.mostPopularVideosHandler();    
+
+    if (!this.props.urlVideoId) {
+      this.props.mostPopularVideosHandler();
+    } else {
+
+      getVideoById(this.props.urlVideoId, (video: GoogleApiYouTubeVideoResource) => {
+        this.props.handleCurrentVideo(video);
+      });
+
+      this.props.relatedVideos(this.props.urlVideoId);
+      this.player.playVideo();
+    }
   }
 
   onPlayerStateChange({data}: MessageEvent) {
@@ -78,16 +85,18 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
   }
 }
 
-const mapStateToProps = ({searchText, youtubeSetVideos, currentVideo}: TState) => ({
+const mapStateToProps = ({ searchText, youtubeSetVideos, currentVideo, urlVideoId }: TState) => ({
   searchText,
   youtubeSetVideos,
-  currentVideo
+  currentVideo,
+  urlVideoId
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<YoutubeAction>) => ({
   searchYoutubeVideos: (keyword: string) => getTopSearchResult(keyword, dispatch),
   mostPopularVideosHandler: () => getMostPopularVideos(dispatch),
-  handleCurrentVideo: (video: GoogleApiYouTubeVideoResource) => dispatch(currentVideoAction(video))
+  handleCurrentVideo: (video: GoogleApiYouTubeVideoResource) => dispatch(currentVideoAction(video)),
+  relatedVideos: (videoId: string) => getRelatedVideos(videoId)(dispatch)
 });
 
 export default connect<TState, DispatchFromProps, void>

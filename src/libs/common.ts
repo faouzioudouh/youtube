@@ -15,7 +15,7 @@ interface Options {
     noPlay?: boolean;
 }
 
-const getIdsFromGoogleResponse = (response: Response<GoogleApiYouTubeSearchResource>) => 
+const getIdsFromGoogleResponse = (response: Response<GoogleApiYouTubeSearchResource>): string => 
     (response.items || []).map((video) => video.id.videoId)
     .join(',');
 
@@ -30,7 +30,7 @@ const handleApiResponse = (dispatch: Dispatch<{}>, options: Options = {}) =>
   }
 };
 
-const getVideoId = (video: GoogleApiYouTubeVideoResource) => {
+const getVideoId = (video: GoogleApiYouTubeVideoResource): string => {
   if (video && video.id) {
     return video.id;
   }

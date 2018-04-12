@@ -6,7 +6,9 @@ const VideoComments: React.StatelessComponent<Props> = (props: Props) => {
     const { comments, handleRef } = props;
 
     const renderComments = (commentsToRender?: Comment[]) => {
-        return (commentsToRender || []).map( (comment: Comment)  => (
+        return (commentsToRender || [])
+        .filter((comment: Comment) => Boolean(comment))
+        .map( (comment: Comment)  => (
             <VideoComment key={comment.id} {...comment} />
         ));
     };

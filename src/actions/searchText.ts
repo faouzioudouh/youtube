@@ -16,6 +16,6 @@ export const SEARCH_TEXT_CHANGED = 'SEARCH_TEXT_CHANGED';
 export const searchTextUpdated = (text: string) => {
   return {
     type: SEARCH_TEXT_CHANGED,
-    text: text
+    text
   };
 };

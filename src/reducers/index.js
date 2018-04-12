@@ -1,4 +1,5 @@
 import searchText from './searchTextReducer';
+import urlVideoId from './urlVideoIdReducer';
 import youtubeSetVideos from './youtube';
 import currentVideo from './currentVideo';
 import channel from './channel';
@@ -9,5 +10,6 @@ export default combineReducers({
     searchText,
     youtubeSetVideos,
     currentVideo,
-    channel
+    channel,
+    urlVideoId
 });

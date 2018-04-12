@@ -7,7 +7,8 @@ export {
   getMostPopularVideos,
   getRelatedVideos,
   loadChannelById,
-  getVideoComments
+  getVideoComments,
+  getVideoById
 }
 
 const YOUTUBE_VIDEO = 'youtube#video';
@@ -144,7 +145,7 @@ const loadChannelById = channelId => callback => {
   });
 }
 
-const getVideoComments = (videoId, pageToken) => callback => {  
+const getVideoComments = (videoId, pageToken) => callback => {
   const request = youtubeSearchList({
     videoId: videoId,
     part: 'snippet,replies',
@@ -152,6 +153,20 @@ const getVideoComments = (videoId, pageToken) => callback => {
     pageToken
   });
 
-  return request(YOUTUBE_COMMENTS)((response) => {
-  callback(response);
-  });}
+  return request(YOUTUBE_COMMENTS)(callback);
+}
+
+/**
+ * Get videos metadata
+ * @param {*} videosIds 
+ * @param {*} dispatch 
+ * @param {*} options 
+ */
+const getVideoById = (videoId, callback) => {
+  const request = youtubeSearchList({
+    id: videoId,
+    part: 'snippet,contentDetails,statistics'
+  });
+
+  return request(YOUTUBE_VIDEOS)((response => callback(response.items[0])));
+}
