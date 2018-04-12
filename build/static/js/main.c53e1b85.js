@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "./";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 295);
+/******/ 	return __webpack_require__(__webpack_require__.s = 297);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -670,7 +670,7 @@ var CallbackQueue = __webpack_require__(74);
 var PooledClass = __webpack_require__(12);
 var ReactFeatureFlags = __webpack_require__(79);
 var ReactReconciler = __webpack_require__(15);
-var Transaction = __webpack_require__(31);
+var Transaction = __webpack_require__(32);
 
 var invariant = __webpack_require__(0);
 
@@ -1339,7 +1339,7 @@ module.exports = PooledClass;
 
 
 var DOMNamespaces = __webpack_require__(41);
-var setInnerHTML = __webpack_require__(33);
+var setInnerHTML = __webpack_require__(34);
 
 var createMicrosoftUnsafeLocalFunction = __webpack_require__(49);
 var setTextContent = __webpack_require__(92);
@@ -2334,7 +2334,7 @@ module.exports = ReactElement;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return currentVideo; });
 /* unused harmony export loadChannel */
 /**
- * @module  actions/SearchText
+ * @module  actions/Youtube
  */
 /**
  * @const {string}
@@ -19452,7 +19452,7 @@ var loadChannel = function (channel) { return ({
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26), __webpack_require__(35)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27), __webpack_require__(35)(module)))
 
 /***/ }),
 /* 21 */
@@ -20023,6 +20023,185 @@ module.exports = reactProdInvariant;
 
 /***/ }),
 /* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return loadYouTubeIframeAPI; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getTopSearchResult; });
+/* unused harmony export getVideosMetadata */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getMostPopularVideos; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getRelatedVideos; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return loadChannelById; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getVideoComments; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getVideoById; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(58);
+
+
+
+
+const YOUTUBE_VIDEO = 'youtube#video';
+const YOUTUBE_SEARCH = 'search';
+const YOUTUBE_VIDEOS = 'videos';
+const YOUTUBE_CHANNELS = 'channels';
+const YOUTUBE_COMMENTS = 'commentThreads';
+
+/**
+ * Load youtube iframe API
+ * @param {*} onPlayerReady 
+ * @param {*} onPlayerStateChange 
+ * @param {*} currentVideoId 
+ */
+const loadYouTubeIframeAPI = (
+  onPlayerReady,
+  onPlayerStateChange,
+  currentVideoId) => {
+
+    const onYouTubeIframeAPIReady = () => {
+      return new YT.Player('YoutubePlayer', {
+        height: '480',
+        width: '854',
+        videoId: currentVideoId,
+        playerVars: {
+          autoplay: 0,
+          cc_load_policy: 1,
+          controls: 1,
+          enablejsapi: 1,
+          iv_load_policy: 3,
+          showinfo: 0,
+          playerapiid: 'ytplayer',
+          rel: 0,
+          loop: 0
+        },
+        events: {
+          onReady: onPlayerReady,
+          onStateChange: onPlayerStateChange
+        }
+      });
+    };
+
+    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+};
+
+/**
+ * Get top search results
+ * @param {*} keyword 
+ * @param {*} dispatch 
+ */
+const getTopSearchResult = (keyword, dispatch) => {
+  const request = youtubeSearchList({
+    q: keyword,
+  });
+
+  return request()((response) => {
+    const videosIds = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["b" /* getIdsFromGoogleResponse */])(response);
+    getVideosMetadata(videosIds, dispatch);
+  });}
+
+/**
+ * Get videos metadata
+ * @param {*} videosIds 
+ * @param {*} dispatch 
+ * @param {*} options 
+ */
+const getVideosMetadata = (videosIds, dispatch, options) => {
+  const request = youtubeSearchList({
+    id: videosIds,
+    part: 'snippet,contentDetails,statistics'
+  });
+
+  const responseCallback = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["c" /* handleApiResponse */])(dispatch, options);
+  return request(YOUTUBE_VIDEOS)(responseCallback);
+}
+
+/**
+ * Get most popular videos
+ * @param {*} dispatch 
+ */
+const getMostPopularVideos = (dispatch) => {
+  const request = youtubeSearchList({
+    chart: 'mostPopular',
+  });
+  
+  return request()((response) => {
+    const videosIds = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["b" /* getIdsFromGoogleResponse */])(response);
+    getVideosMetadata(videosIds, dispatch);
+  });
+}
+
+/**
+ * Get related videos
+ * @param {*} videoId 
+ */
+const getRelatedVideos = (videoId) => (dispatch) => {
+  const request = youtubeSearchList({
+    relatedToVideoId: videoId
+  });
+
+  return request()((response) => {
+    const videosIds = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["b" /* getIdsFromGoogleResponse */])(response);
+    getVideosMetadata(videosIds, dispatch, {noPlay: true});
+  });
+}
+
+/**
+ * Youtube search list
+ * @param {*} options 
+ */
+const youtubeSearchList = options => (TYPE = YOUTUBE_SEARCH) => callback => {
+  const mergedOptions = Object.assign({}, {
+    type: 'video',
+    part: 'id',
+    maxResults: 10
+  }, options);
+
+  const request = gapi.client.youtube[TYPE].list(mergedOptions);
+  return request.execute(callback);
+}
+
+/**
+ * 
+ * @param {*} channelId 
+ */
+const loadChannelById = channelId => callback => {
+  const request = youtubeSearchList({
+    id: channelId,
+    part: 'snippet'
+  });
+
+  return request(YOUTUBE_CHANNELS)((response) => {
+    callback(response);
+  });
+}
+
+const getVideoComments = (videoId, pageToken) => callback => {
+  const request = youtubeSearchList({
+    videoId: videoId,
+    part: 'snippet,replies',
+    type: null,
+    pageToken
+  });
+
+  return request(YOUTUBE_COMMENTS)(callback);
+}
+
+/**
+ * Get videos metadata
+ * @param {*} videosIds 
+ * @param {*} dispatch 
+ * @param {*} options 
+ */
+const getVideoById = (videoId, callback) => {
+  const request = youtubeSearchList({
+    id: videoId,
+    part: 'snippet,contentDetails,statistics'
+  });
+
+  return request(YOUTUBE_VIDEOS)((response => callback(response.items[0])));
+}
+
+
+/***/ }),
+/* 27 */
 /***/ (function(module, exports) {
 
 var g;
@@ -20049,7 +20228,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -20104,7 +20283,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20127,7 +20306,7 @@ if (false) {
 module.exports = emptyObject;
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20454,7 +20633,7 @@ var ReactBrowserEventEmitter = _assign({}, ReactEventEmitterMixin, {
 module.exports = ReactBrowserEventEmitter;
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20529,7 +20708,7 @@ SyntheticUIEvent.augmentClass(SyntheticMouseEvent, MouseEventInterface);
 module.exports = SyntheticMouseEvent;
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20760,7 +20939,7 @@ var TransactionImpl = {
 module.exports = TransactionImpl;
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20885,7 +21064,7 @@ function escapeTextContentForBrowser(text) {
 module.exports = escapeTextContentForBrowser;
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -20984,170 +21163,6 @@ if (ExecutionEnvironment.canUseDOM) {
 }
 
 module.exports = setInnerHTML;
-
-/***/ }),
-/* 34 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return loadYouTubeIframeAPI; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getTopSearchResult; });
-/* unused harmony export getVideosMetadata */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getMostPopularVideos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getRelatedVideos; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return loadChannelById; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getVideoComments; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__common__ = __webpack_require__(58);
-
-
-
-
-const YOUTUBE_VIDEO = 'youtube#video';
-const YOUTUBE_SEARCH = 'search';
-const YOUTUBE_VIDEOS = 'videos';
-const YOUTUBE_CHANNELS = 'channels';
-const YOUTUBE_COMMENTS = 'commentThreads';
-
-/**
- * Load youtube iframe API
- * @param {*} onPlayerReady 
- * @param {*} onPlayerStateChange 
- * @param {*} currentVideoId 
- */
-const loadYouTubeIframeAPI = (
-  onPlayerReady,
-  onPlayerStateChange,
-  currentVideoId) => {
-
-    const onYouTubeIframeAPIReady = () => {
-      return new YT.Player('YoutubePlayer', {
-        height: '480',
-        width: '854',
-        videoId: currentVideoId,
-        playerVars: {
-          autoplay: 0,
-          cc_load_policy: 1,
-          controls: 1,
-          enablejsapi: 1,
-          iv_load_policy: 3,
-          showinfo: 0,
-          playerapiid: 'ytplayer',
-          rel: 0,
-          loop: 0
-        },
-        events: {
-          onReady: onPlayerReady,
-          onStateChange: onPlayerStateChange
-        }
-      });
-    };
-
-    window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-};
-
-/**
- * Get top search results
- * @param {*} keyword 
- * @param {*} dispatch 
- */
-const getTopSearchResult = (keyword, dispatch) => {
-  const request = youtubeSearchList({
-    q: keyword,
-  });
-
-  return request()((response) => {
-    const videosIds = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["b" /* getIdsFromGoogleResponse */])(response);
-    getVideosMetadata(videosIds, dispatch);
-  });}
-
-/**
- * Get videos metadata
- * @param {*} videosIds 
- * @param {*} dispatch 
- * @param {*} options 
- */
-const getVideosMetadata = (videosIds, dispatch, options) => {
-  const request = youtubeSearchList({
-    id: videosIds,
-    part: 'snippet,contentDetails,statistics'
-  });
-
-  const responseCallback = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["c" /* handleApiResponse */])(dispatch, options);
-  return request(YOUTUBE_VIDEOS)(responseCallback);
-}
-
-/**
- * Get most popular videos
- * @param {*} dispatch 
- */
-const getMostPopularVideos = (dispatch) => {
-  const request = youtubeSearchList({
-    chart: 'mostPopular',
-  });
-  
-  return request()((response) => {
-    const videosIds = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["b" /* getIdsFromGoogleResponse */])(response);
-    getVideosMetadata(videosIds, dispatch);
-  });
-}
-
-/**
- * Get related videos
- * @param {*} videoId 
- */
-const getRelatedVideos = (videoId) => (dispatch) => {
-  const request = youtubeSearchList({
-    relatedToVideoId: videoId
-  });
-
-  return request()((response) => {
-    const videosIds = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__common__["b" /* getIdsFromGoogleResponse */])(response);
-    getVideosMetadata(videosIds, dispatch, {noPlay: true});
-  });
-}
-
-/**
- * Youtube search list
- * @param {*} options 
- */
-const youtubeSearchList = options => (TYPE = YOUTUBE_SEARCH) => callback => {
-  const mergedOptions = Object.assign({}, {
-    type: 'video',
-    part: 'id',
-    maxResults: 10
-  }, options);
-
-  const request = gapi.client.youtube[TYPE].list(mergedOptions);
-  return request.execute(callback);
-}
-
-/**
- * 
- * @param {*} channelId 
- */
-const loadChannelById = channelId => callback => {
-  const request = youtubeSearchList({
-    id: channelId,
-    part: 'snippet'
-  });
-
-  return request(YOUTUBE_CHANNELS)((response) => {
-    callback(response);
-  });
-}
-
-const getVideoComments = (videoId, pageToken) => callback => {  
-  const request = youtubeSearchList({
-    videoId: videoId,
-    part: 'snippet,replies',
-    type: null,
-    pageToken
-  });
-
-  return request(YOUTUBE_COMMENTS)((response) => {
-  callback(response);
-  });}
-
 
 /***/ }),
 /* 35 */
@@ -21413,7 +21428,7 @@ var ReactDOMComponentTree = __webpack_require__(5);
 var ReactInstrumentation = __webpack_require__(8);
 
 var createMicrosoftUnsafeLocalFunction = __webpack_require__(49);
-var setInnerHTML = __webpack_require__(33);
+var setInnerHTML = __webpack_require__(34);
 var setTextContent = __webpack_require__(92);
 
 function getNodeAfter(parentNode, node) {
@@ -25286,7 +25301,7 @@ var _prodInvariant = __webpack_require__(2);
 var DOMLazyTree = __webpack_require__(13);
 var DOMProperty = __webpack_require__(14);
 var React = __webpack_require__(17);
-var ReactBrowserEventEmitter = __webpack_require__(29);
+var ReactBrowserEventEmitter = __webpack_require__(30);
 var ReactCurrentOwner = __webpack_require__(11);
 var ReactDOMComponentTree = __webpack_require__(5);
 var ReactDOMContainerInfo = __webpack_require__(177);
@@ -25299,10 +25314,10 @@ var ReactReconciler = __webpack_require__(15);
 var ReactUpdateQueue = __webpack_require__(48);
 var ReactUpdates = __webpack_require__(9);
 
-var emptyObject = __webpack_require__(28);
+var emptyObject = __webpack_require__(29);
 var instantiateReactComponent = __webpack_require__(90);
 var invariant = __webpack_require__(0);
-var setInnerHTML = __webpack_require__(33);
+var setInnerHTML = __webpack_require__(34);
 var shouldUpdateReactComponent = __webpack_require__(54);
 var warning = __webpack_require__(1);
 
@@ -26370,8 +26385,8 @@ module.exports = isTextInputElement;
 
 
 var ExecutionEnvironment = __webpack_require__(6);
-var escapeTextContentForBrowser = __webpack_require__(32);
-var setInnerHTML = __webpack_require__(33);
+var escapeTextContentForBrowser = __webpack_require__(33);
+var setInnerHTML = __webpack_require__(34);
 
 /**
  * Set the textContent property of a node, ensuring that whitespace is preserved
@@ -27031,7 +27046,7 @@ var _prodInvariant = __webpack_require__(25),
 var ReactNoopUpdateQueue = __webpack_require__(101);
 
 var canDefineProperty = __webpack_require__(102);
-var emptyObject = __webpack_require__(28);
+var emptyObject = __webpack_require__(29);
 var invariant = __webpack_require__(0);
 var lowPriorityWarning = __webpack_require__(243);
 
@@ -28047,7 +28062,7 @@ var searchTextUpdated = function (text) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ExpanderConatiner__ = __webpack_require__(258);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ExpanderConatiner__ = __webpack_require__(259);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__ExpanderConatiner__["a"]; });
 
 
@@ -28057,7 +28072,7 @@ var searchTextUpdated = function (text) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Loader__ = __webpack_require__(264);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Loader__ = __webpack_require__(265);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__Loader__["a"]; });
 
 
@@ -28067,7 +28082,7 @@ var searchTextUpdated = function (text) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__FormatString__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__FormatString__ = __webpack_require__(283);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__FormatString__["a"]; });
 
 
@@ -28077,7 +28092,7 @@ var searchTextUpdated = function (text) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__YTime__ = __webpack_require__(283);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__YTime__ = __webpack_require__(284);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__YTime__["a"]; });
 
 
@@ -29105,7 +29120,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 }(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35)(module), __webpack_require__(26)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(35)(module), __webpack_require__(27)))
 
 /***/ }),
 /* 115 */
@@ -29133,7 +29148,7 @@ if (typeof Promise === 'undefined') {
 }
 
 // fetch() polyfill for making API calls.
-__webpack_require__(294);
+__webpack_require__(296);
 
 // Object.assign() is commonly used with React.
 // It will use the native implementation if it's present and isn't buggy.
@@ -29628,7 +29643,7 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 // back into ASAP proper.
 // https://github.com/tildeio/rsvp.js/blob/cddf7232546a9cf858524b75cde6f9edf72620a7/lib/rsvp/asap.js
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27)))
 
 /***/ }),
 /* 122 */
@@ -29647,7 +29662,7 @@ rawAsap.makeRequestCallFromTimer = makeRequestCallFromTimer;
 
 var _assign = __webpack_require__(3);
 
-var emptyObject = __webpack_require__(28);
+var emptyObject = __webpack_require__(29);
 var _invariant = __webpack_require__(0);
 
 if (false) {
@@ -31390,7 +31405,7 @@ var freeGlobal = typeof global == 'object' && global && global.Object === Object
 
 /* harmony default export */ __webpack_exports__["a"] = (freeGlobal);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(26)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(27)))
 
 /***/ }),
 /* 149 */
@@ -38076,7 +38091,7 @@ module.exports = DefaultEventPluginOrder;
 
 var EventPropagators = __webpack_require__(22);
 var ReactDOMComponentTree = __webpack_require__(5);
-var SyntheticMouseEvent = __webpack_require__(30);
+var SyntheticMouseEvent = __webpack_require__(31);
 
 var eventTypes = {
   mouseEnter: {
@@ -38717,7 +38732,7 @@ if (false) {
   var checkReactTypeSpec = require('./checkReactTypeSpec');
 }
 
-var emptyObject = __webpack_require__(28);
+var emptyObject = __webpack_require__(29);
 var invariant = __webpack_require__(0);
 var shallowEqual = __webpack_require__(38);
 var shouldUpdateReactComponent = __webpack_require__(54);
@@ -39731,7 +39746,7 @@ var DOMProperty = __webpack_require__(14);
 var DOMPropertyOperations = __webpack_require__(75);
 var EventPluginHub = __webpack_require__(21);
 var EventPluginRegistry = __webpack_require__(42);
-var ReactBrowserEventEmitter = __webpack_require__(29);
+var ReactBrowserEventEmitter = __webpack_require__(30);
 var ReactDOMComponentFlags = __webpack_require__(76);
 var ReactDOMComponentTree = __webpack_require__(5);
 var ReactDOMInput = __webpack_require__(181);
@@ -39743,7 +39758,7 @@ var ReactMultiChild = __webpack_require__(194);
 var ReactServerRenderingTransaction = __webpack_require__(199);
 
 var emptyFunction = __webpack_require__(7);
-var escapeTextContentForBrowser = __webpack_require__(32);
+var escapeTextContentForBrowser = __webpack_require__(33);
 var invariant = __webpack_require__(0);
 var isEventSupported = __webpack_require__(53);
 var shallowEqual = __webpack_require__(38);
@@ -41529,7 +41544,7 @@ var DOMChildrenOperations = __webpack_require__(40);
 var DOMLazyTree = __webpack_require__(13);
 var ReactDOMComponentTree = __webpack_require__(5);
 
-var escapeTextContentForBrowser = __webpack_require__(32);
+var escapeTextContentForBrowser = __webpack_require__(33);
 var invariant = __webpack_require__(0);
 var validateDOMNesting = __webpack_require__(55);
 
@@ -41992,7 +42007,7 @@ module.exports = {
 var _assign = __webpack_require__(3);
 
 var ReactUpdates = __webpack_require__(9);
-var Transaction = __webpack_require__(31);
+var Transaction = __webpack_require__(32);
 
 var emptyFunction = __webpack_require__(7);
 
@@ -42370,7 +42385,7 @@ var EventPluginHub = __webpack_require__(21);
 var EventPluginUtils = __webpack_require__(43);
 var ReactComponentEnvironment = __webpack_require__(46);
 var ReactEmptyComponent = __webpack_require__(78);
-var ReactBrowserEventEmitter = __webpack_require__(29);
+var ReactBrowserEventEmitter = __webpack_require__(30);
 var ReactHostComponent = __webpack_require__(80);
 var ReactUpdates = __webpack_require__(9);
 
@@ -43024,10 +43039,10 @@ var _assign = __webpack_require__(3);
 
 var CallbackQueue = __webpack_require__(74);
 var PooledClass = __webpack_require__(12);
-var ReactBrowserEventEmitter = __webpack_require__(29);
+var ReactBrowserEventEmitter = __webpack_require__(30);
 var ReactInputSelection = __webpack_require__(81);
 var ReactInstrumentation = __webpack_require__(8);
-var Transaction = __webpack_require__(31);
+var Transaction = __webpack_require__(32);
 var ReactUpdateQueue = __webpack_require__(48);
 
 /**
@@ -43296,7 +43311,7 @@ module.exports = ReactRef;
 var _assign = __webpack_require__(3);
 
 var PooledClass = __webpack_require__(12);
-var Transaction = __webpack_require__(31);
+var Transaction = __webpack_require__(32);
 var ReactInstrumentation = __webpack_require__(8);
 var ReactServerUpdateQueue = __webpack_require__(200);
 
@@ -44052,7 +44067,7 @@ var SyntheticClipboardEvent = __webpack_require__(206);
 var SyntheticEvent = __webpack_require__(10);
 var SyntheticFocusEvent = __webpack_require__(209);
 var SyntheticKeyboardEvent = __webpack_require__(211);
-var SyntheticMouseEvent = __webpack_require__(30);
+var SyntheticMouseEvent = __webpack_require__(31);
 var SyntheticDragEvent = __webpack_require__(208);
 var SyntheticTouchEvent = __webpack_require__(212);
 var SyntheticTransitionEvent = __webpack_require__(213);
@@ -44392,7 +44407,7 @@ module.exports = SyntheticCompositionEvent;
 
 
 
-var SyntheticMouseEvent = __webpack_require__(30);
+var SyntheticMouseEvent = __webpack_require__(31);
 
 /**
  * @interface DragEvent
@@ -44687,7 +44702,7 @@ module.exports = SyntheticTransitionEvent;
 
 
 
-var SyntheticMouseEvent = __webpack_require__(30);
+var SyntheticMouseEvent = __webpack_require__(31);
 
 /**
  * @interface WheelEvent
@@ -45353,7 +45368,7 @@ module.exports = getVendorPrefixedEventName;
 
 
 
-var escapeTextContentForBrowser = __webpack_require__(32);
+var escapeTextContentForBrowser = __webpack_require__(33);
 
 /**
  * Escapes attribute value to prevent scripting attacks.
@@ -47217,11 +47232,12 @@ function combineReducers(reducers) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__searchTextReducer__ = __webpack_require__(288);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__youtube__ = __webpack_require__(289);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__currentVideo__ = __webpack_require__(287);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__channel__ = __webpack_require__(286);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_redux__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__searchTextReducer__ = __webpack_require__(289);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__urlVideoIdReducer__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__youtube__ = __webpack_require__(291);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__currentVideo__ = __webpack_require__(288);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__channel__ = __webpack_require__(287);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_redux__ = __webpack_require__(57);
 
 
 
@@ -47229,11 +47245,13 @@ function combineReducers(reducers) {
 
 
 
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4_redux__["c" /* combineReducers */])({
+
+/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5_redux__["c" /* combineReducers */])({
     searchText: __WEBPACK_IMPORTED_MODULE_0__searchTextReducer__["a" /* default */],
-    youtubeSetVideos: __WEBPACK_IMPORTED_MODULE_1__youtube__["a" /* default */],
-    currentVideo: __WEBPACK_IMPORTED_MODULE_2__currentVideo__["a" /* default */],
-    channel: __WEBPACK_IMPORTED_MODULE_3__channel__["a" /* default */]
+    youtubeSetVideos: __WEBPACK_IMPORTED_MODULE_2__youtube__["a" /* default */],
+    currentVideo: __WEBPACK_IMPORTED_MODULE_3__currentVideo__["a" /* default */],
+    channel: __WEBPACK_IMPORTED_MODULE_4__channel__["a" /* default */],
+    urlVideoId: __WEBPACK_IMPORTED_MODULE_1__urlVideoIdReducer__["a" /* default */]
 }));
 
 /***/ }),
@@ -47277,7 +47295,7 @@ if (typeof self !== 'undefined') {
 
 var result = (0, _ponyfill2['default'])(root);
 exports['default'] = result;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(26), __webpack_require__(35)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(27), __webpack_require__(35)(module)))
 
 /***/ }),
 /* 253 */
@@ -47315,11 +47333,11 @@ function symbolObservablePonyfill(root) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Header__ = __webpack_require__(261);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_YoutubePlayer__ = __webpack_require__(281);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NextVideos__ = __webpack_require__(267);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_VideoDetails__ = __webpack_require__(278);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__hoc_storeProvider__ = __webpack_require__(285);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_Header__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_YoutubePlayer__ = __webpack_require__(282);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_NextVideos__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_VideoDetails__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__hoc_storeProvider__ = __webpack_require__(286);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__App_css__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__App_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__App_css__);
 var __extends = (this && this.__extends) || (function () {
@@ -47339,7 +47357,7 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
-var logo = __webpack_require__(293);
+var logo = __webpack_require__(295);
 var logoProps = {
     src: logo,
     alt: "Youtubx's respository on Github",
@@ -47373,6 +47391,34 @@ var App = (function (_super) {
 
 /***/ }),
 /* 255 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return URL_VIDEO_ID_CHANGED; });
+/* unused harmony export updateUrlVideoId */
+/**
+ * @module  actions/UrlVideoId
+ */
+/**
+ * @const {string}
+ */
+var URL_VIDEO_ID_CHANGED = 'URL_VIDEO_ID_CHANGED';
+/**
+ * @function searchTextUpdated
+ *
+ * @description  Return an `action`
+ * @return {Object}
+ */
+var updateUrlVideoId = function (videoId) {
+    return {
+        type: URL_VIDEO_ID_CHANGED,
+        videoId: videoId
+    };
+};
+
+
+/***/ }),
+/* 256 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47427,25 +47473,15 @@ var ChannelCard = (function (_super) {
 
 
 /***/ }),
-/* 256 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ChannelCard__ = __webpack_require__(255);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hoc_ProvideChannelData__ = __webpack_require__(284);
-
-
-/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__hoc_ProvideChannelData__["a" /* default */])(__WEBPACK_IMPORTED_MODULE_0__ChannelCard__["a" /* default */]));
-
-
-/***/ }),
 /* 257 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ChannelCradContainer__ = __webpack_require__(256);
-/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__ChannelCradContainer__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ChannelCard__ = __webpack_require__(256);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__hoc_ProvideChannelData__ = __webpack_require__(285);
 
+
+/* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__hoc_ProvideChannelData__["a" /* default */])(__WEBPACK_IMPORTED_MODULE_0__ChannelCard__["a" /* default */]));
 
 
 /***/ }),
@@ -47453,9 +47489,19 @@ var ChannelCard = (function (_super) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ChannelCradContainer__ = __webpack_require__(257);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__ChannelCradContainer__["a"]; });
+
+
+
+/***/ }),
+/* 259 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_classnames__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_classnames__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_classnames__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
@@ -47556,7 +47602,7 @@ var Expander = (function (_super) {
 
 
 /***/ }),
-/* 259 */
+/* 260 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47564,7 +47610,7 @@ var Expander = (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Header_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Header_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Input__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Input__ = __webpack_require__(264);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -47594,7 +47640,7 @@ var Header = function (_a) {
 
 
 /***/ }),
-/* 260 */
+/* 261 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47603,7 +47649,7 @@ var Header = function (_a) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Header__ = __webpack_require__(259);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Header__ = __webpack_require__(260);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__actions_searchText__ = __webpack_require__(106);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -47658,17 +47704,17 @@ var mapDispatchToProps = function (dispatch) { return ({
 
 
 /***/ }),
-/* 261 */
+/* 262 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HeaderContainer__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__HeaderContainer__ = __webpack_require__(261);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__HeaderContainer__["a"]; });
 
 
 
 /***/ }),
-/* 262 */
+/* 263 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47676,7 +47722,7 @@ var mapDispatchToProps = function (dispatch) { return ({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Input_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__Input_css__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_classnames__);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -47700,17 +47746,17 @@ var Input = function (props) {
 
 
 /***/ }),
-/* 263 */
+/* 264 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Input__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Input__ = __webpack_require__(263);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__Input__["a"]; });
 
 
 
 /***/ }),
-/* 264 */
+/* 265 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47729,14 +47775,14 @@ var Loader = function (_a) {
 
 
 /***/ }),
-/* 265 */
+/* 266 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VideoCard__ = __webpack_require__(270);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VideoCard__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_classnames__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__libs_common__ = __webpack_require__(58);
 
@@ -47761,12 +47807,12 @@ var NextVideos = function (_a) {
 
 
 /***/ }),
-/* 266 */
+/* 267 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react_redux__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__NextVideos__ = __webpack_require__(265);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__NextVideos__ = __webpack_require__(266);
 
 
 var mapStateToProps = function (_a) {
@@ -47780,23 +47826,23 @@ var mapStateToProps = function (_a) {
 
 
 /***/ }),
-/* 267 */
+/* 268 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__NextVideosContainer__ = __webpack_require__(266);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__NextVideosContainer__ = __webpack_require__(267);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__NextVideosContainer__["a"]; });
 
 
 
 /***/ }),
-/* 268 */
+/* 269 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_classnames__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_classnames__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_classnames__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_formatNumber__ = __webpack_require__(111);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__VideoCrad_css__ = __webpack_require__(129);
@@ -47834,16 +47880,16 @@ var VideoCard = function (_a) {
 
 
 /***/ }),
-/* 269 */
+/* 270 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__VideoCard__ = __webpack_require__(268);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__VideoCard__ = __webpack_require__(269);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions_youtube__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__ = __webpack_require__(26);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -47901,17 +47947,17 @@ var mergeProps = function (stateProps, dispatchProps, ownProps) {
 
 
 /***/ }),
-/* 270 */
+/* 271 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoCardContainer__ = __webpack_require__(269);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoCardContainer__ = __webpack_require__(270);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__VideoCardContainer__["a"]; });
 
 
 
 /***/ }),
-/* 271 */
+/* 272 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -47955,23 +48001,23 @@ var VideoComment = function (props) {
 
 
 /***/ }),
-/* 272 */
+/* 273 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoComment__ = __webpack_require__(271);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoComment__ = __webpack_require__(272);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__VideoComment__["a"]; });
 
 
 
 /***/ }),
-/* 273 */
+/* 274 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VideoComment__ = __webpack_require__(272);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__VideoComment__ = __webpack_require__(273);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -47985,7 +48031,9 @@ var __assign = (this && this.__assign) || Object.assign || function(t) {
 var VideoComments = function (props) {
     var comments = props.comments, handleRef = props.handleRef;
     var renderComments = function (commentsToRender) {
-        return (commentsToRender || []).map(function (comment) { return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1__VideoComment__["a" /* default */], __assign({ key: comment.id }, comment))); });
+        return (commentsToRender || [])
+            .filter(function (comment) { return Boolean(comment); })
+            .map(function (comment) { return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_1__VideoComment__["a" /* default */], __assign({ key: comment.id }, comment))); });
     };
     return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { ref: function (node) { return handleRef(node); } },
         " ",
@@ -47996,14 +48044,14 @@ var VideoComments = function (props) {
 
 
 /***/ }),
-/* 274 */
+/* 275 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_youtubeHelper_js__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__VideoComments__ = __webpack_require__(273);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_youtubeHelper_js__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__VideoComments__ = __webpack_require__(274);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Loader__ = __webpack_require__(108);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -48089,17 +48137,17 @@ var VideoCommentsContainer = (function (_super) {
 
 
 /***/ }),
-/* 275 */
+/* 276 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoCommentsContainer__ = __webpack_require__(274);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoCommentsContainer__ = __webpack_require__(275);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__VideoCommentsContainer__["a"]; });
 
 
 
 /***/ }),
-/* 276 */
+/* 277 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48108,10 +48156,10 @@ var VideoCommentsContainer = (function (_super) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_formatNumber__ = __webpack_require__(111);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__VideoDetails_css__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__VideoDetails_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__VideoDetails_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ChannelCard__ = __webpack_require__(257);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ChannelCard__ = __webpack_require__(258);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__helpers_FormatString__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_Expander__ = __webpack_require__(107);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_VideoComments__ = __webpack_require__(275);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_VideoComments__ = __webpack_require__(276);
 var __assign = (this && this.__assign) || Object.assign || function(t) {
     for (var s, i = 1, n = arguments.length; i < n; i++) {
         s = arguments[i];
@@ -48169,11 +48217,11 @@ var VideoDetails = function (_a) {
 
 
 /***/ }),
-/* 277 */
+/* 278 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoDetails__ = __webpack_require__(276);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoDetails__ = __webpack_require__(277);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(16);
 
 
@@ -48185,17 +48233,17 @@ var mapStateToProps = function (_a) {
 
 
 /***/ }),
-/* 278 */
+/* 279 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoDetailsContainer__ = __webpack_require__(277);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__VideoDetailsContainer__ = __webpack_require__(278);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__VideoDetailsContainer__["a"]; });
 
 
 
 /***/ }),
-/* 279 */
+/* 280 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48212,16 +48260,16 @@ var YoutubePlayer = function () {
 
 
 /***/ }),
-/* 280 */
+/* 281 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__YoutubePlayer__ = __webpack_require__(279);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__YoutubePlayer__ = __webpack_require__(280);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__actions_youtube__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__ = __webpack_require__(26);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__libs_common__ = __webpack_require__(58);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
@@ -48239,17 +48287,18 @@ var __extends = (this && this.__extends) || (function () {
 
 
 
+
 var YoutubePlayerContainer = (function (_super) {
     __extends(YoutubePlayerContainer, _super);
-    function YoutubePlayerContainer() {
-        var _this = _super.call(this) || this;
+    function YoutubePlayerContainer(props) {
+        var _this = _super.call(this, props) || this;
         _this.onPlayerReady = _this.onPlayerReady.bind(_this);
         _this.onPlayerStateChange = _this.onPlayerStateChange.bind(_this);
         _this.playNextVideo = _this.playNextVideo.bind(_this);
         return _this;
     }
     YoutubePlayerContainer.prototype.componentDidMount = function () {
-        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["d" /* loadYouTubeIframeAPI */])(this.onPlayerReady, this.onPlayerStateChange, this.props.searchText);
+        __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["d" /* loadYouTubeIframeAPI */])(this.onPlayerReady, this.onPlayerStateChange, this.props.urlVideoId);
     };
     YoutubePlayerContainer.prototype.componentDidUpdate = function (prevProps) {
         if (prevProps.searchText !== this.props.searchText) {
@@ -48260,14 +48309,20 @@ var YoutubePlayerContainer = (function (_super) {
             this.player.loadVideoById(newVideoId);
         }
     };
-    YoutubePlayerContainer.prototype.playVideo = function (video) {
-        this.player.loadVideoById(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_5__libs_common__["a" /* getVideoId */])(video));
-    };
     YoutubePlayerContainer.prototype.onPlayerReady = function (_a) {
+        var _this = this;
         var target = _a.target;
         this.player = target;
-        // this.player.playVideo();
-        this.props.mostPopularVideosHandler();
+        if (!this.props.urlVideoId) {
+            this.props.mostPopularVideosHandler();
+        }
+        else {
+            __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["e" /* getVideoById */])(this.props.urlVideoId, function (video) {
+                _this.props.handleCurrentVideo(video);
+            });
+            this.props.relatedVideos(this.props.urlVideoId);
+            this.player.playVideo();
+        }
     };
     YoutubePlayerContainer.prototype.onPlayerStateChange = function (_a) {
         var data = _a.data;
@@ -48293,33 +48348,35 @@ var YoutubePlayerContainer = (function (_super) {
     return YoutubePlayerContainer;
 }(__WEBPACK_IMPORTED_MODULE_0_react__["Component"]));
 var mapStateToProps = function (_a) {
-    var searchText = _a.searchText, youtubeSetVideos = _a.youtubeSetVideos, currentVideo = _a.currentVideo;
+    var searchText = _a.searchText, youtubeSetVideos = _a.youtubeSetVideos, currentVideo = _a.currentVideo, urlVideoId = _a.urlVideoId;
     return ({
         searchText: searchText,
         youtubeSetVideos: youtubeSetVideos,
-        currentVideo: currentVideo
+        currentVideo: currentVideo,
+        urlVideoId: urlVideoId
     });
 };
 var mapDispatchToProps = function (dispatch) { return ({
-    searchYoutubeVideos: function (keyword) { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["e" /* getTopSearchResult */])(keyword, dispatch); },
-    mostPopularVideosHandler: function () { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["f" /* getMostPopularVideos */])(dispatch); },
-    handleCurrentVideo: function (video) { return dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__actions_youtube__["d" /* currentVideo */])(video)); }
+    searchYoutubeVideos: function (keyword) { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["f" /* getTopSearchResult */])(keyword, dispatch); },
+    mostPopularVideosHandler: function () { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["g" /* getMostPopularVideos */])(dispatch); },
+    handleCurrentVideo: function (video) { return dispatch(__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__actions_youtube__["d" /* currentVideo */])(video)); },
+    relatedVideos: function (videoId) { return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_4__libs_youtubeHelper_js__["a" /* getRelatedVideos */])(videoId)(dispatch); }
 }); };
 /* harmony default export */ __webpack_exports__["a"] = (__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1_react_redux__["b" /* connect */])(mapStateToProps, mapDispatchToProps)(YoutubePlayerContainer));
 
 
 /***/ }),
-/* 281 */
+/* 282 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__YoutubePlayerContainer__ = __webpack_require__(280);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__YoutubePlayerContainer__ = __webpack_require__(281);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_0__YoutubePlayerContainer__["a"]; });
 
 
 
 /***/ }),
-/* 282 */
+/* 283 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48371,7 +48428,7 @@ var FormatString = (function (_super) {
 
 
 /***/ }),
-/* 283 */
+/* 284 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48400,7 +48457,7 @@ var YTime = function (_a) {
 
 
 /***/ }),
-/* 284 */
+/* 285 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48408,7 +48465,7 @@ var YTime = function (_a) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash__ = __webpack_require__(20);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_lodash__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_youtubeHelper_js__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_youtubeHelper_js__ = __webpack_require__(26);
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = Object.setPrototypeOf ||
         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
@@ -48469,14 +48526,14 @@ var provideChannelData = function (Component) {
 
 
 /***/ }),
-/* 285 */
+/* 286 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react_redux__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_currentStore__ = __webpack_require__(291);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__store_currentStore__ = __webpack_require__(293);
 
 
 
@@ -48486,7 +48543,7 @@ var storeProvider = function (Component) { return (__WEBPACK_IMPORTED_MODULE_0_r
 
 
 /***/ }),
-/* 286 */
+/* 287 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48505,7 +48562,7 @@ var channel = function (state, action) {
 
 
 /***/ }),
-/* 287 */
+/* 288 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48526,7 +48583,7 @@ var currentVideo = function (state, action) {
 
 
 /***/ }),
-/* 288 */
+/* 289 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48546,7 +48603,27 @@ var searchText = function (state, action) {
 
 
 /***/ }),
-/* 289 */
+/* 290 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__actions_urlVideoId__ = __webpack_require__(255);
+
+var urlVideoId = function (state, action) {
+    if (state === void 0) { state = ''; }
+    if (action === void 0) { action = {}; }
+    switch (action.type) {
+        case __WEBPACK_IMPORTED_MODULE_0__actions_urlVideoId__["a" /* URL_VIDEO_ID_CHANGED */]:
+            return action.videoId;
+        default:
+            return state;
+    }
+};
+/* harmony default export */ __webpack_exports__["a"] = (urlVideoId);
+
+
+/***/ }),
+/* 291 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48565,7 +48642,7 @@ var youtubeSetVideos = function (state, action) {
 
 
 /***/ }),
-/* 290 */
+/* 292 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -48584,30 +48661,33 @@ var configureStore = function (initialState) {
 
 
 /***/ }),
-/* 291 */
+/* 293 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_urijs__ = __webpack_require__(292);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_urijs__ = __webpack_require__(294);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_urijs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_urijs__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__configureStore__ = __webpack_require__(290);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__configureStore__ = __webpack_require__(292);
 
 
+var urlParsed = __WEBPACK_IMPORTED_MODULE_0_urijs___default.a.parseQuery(document.location.search);
 var initialState = {
-    searchText: '814eR5K7KD8'
+    urlVideoId: urlParsed['v'] || '814eR5K7KD8',
 };
 // The instance of the current store shared in the application.
 var currentStore = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__configureStore__["a" /* default */])(initialState);
 currentStore.subscribe(function () {
-    var videoId = currentStore.getState().currentVideo ? currentStore.getState().currentVideo.id : null;
-    var newUrl = __WEBPACK_IMPORTED_MODULE_0_urijs___default()(document.location.href).query({ v: videoId }).toString();
-    history.pushState(null, '', newUrl);
+    var currentVideo = currentStore.getState().currentVideo;
+    if (currentVideo) {
+        var newUrl = __WEBPACK_IMPORTED_MODULE_0_urijs___default()(document.location.href).query({ v: currentVideo.id }).toString();
+        history.pushState(null, '', newUrl);
+    }
 });
 /* harmony default export */ __webpack_exports__["a"] = (currentStore);
 
 
 /***/ }),
-/* 292 */
+/* 294 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -50954,13 +51034,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 293 */
+/* 295 */
 /***/ (function(module, exports) {
 
 module.exports = "data:image/png;base64,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"
 
 /***/ }),
-/* 294 */
+/* 296 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -51427,7 +51507,7 @@ module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASUAAABkCAYAAADA
 
 
 /***/ }),
-/* 295 */
+/* 297 */
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(115);
@@ -51436,4 +51516,4 @@ module.exports = __webpack_require__(116);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.1f9ff8fe.js.map
+//# sourceMappingURL=main.c53e1b85.js.map
