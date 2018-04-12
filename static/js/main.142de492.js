@@ -48182,7 +48182,7 @@ var VideoDetails = function (_a) {
     }
     var snippet = video.snippet, statistics = video.statistics;
     var title = snippet.title, channelId = snippet.channelId, channelTitle = snippet.channelTitle, description = snippet.description, publishedAt = snippet.publishedAt;
-    var dislikeCount = statistics.dislikeCount, likeCount = statistics.likeCount, viewCount = statistics.viewCount;
+    var dislikeCount = statistics.dislikeCount, likeCount = statistics.likeCount, commentCount = statistics.commentCount, viewCount = statistics.viewCount;
     var ChannelProps = {
         channelId: channelId,
         channelTitle: channelTitle,
@@ -48211,6 +48211,10 @@ var VideoDetails = function (_a) {
                 __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_5__components_Expander__["a" /* default */], { collapsedHeight: "60", collapsedClass: "colapsed", expandedClass: "expanded" },
                     __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_4__helpers_FormatString__["a" /* default */], { text: description, tagName: "p" })))),
         __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoComments__wrapper" },
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "VideoComments__header" },
+                __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("h2", { className: "VideoComments__header-coment-count" },
+                    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__libs_formatNumber__["c" /* formatNumberCommas */])(commentCount),
+                    " Comments")),
             __WEBPACK_IMPORTED_MODULE_0_react__["createElement"](__WEBPACK_IMPORTED_MODULE_6__components_VideoComments__["a" /* default */], { video: video }))));
 };
 /* harmony default export */ __webpack_exports__["a"] = (VideoDetails);
@@ -51516,4 +51520,4 @@ module.exports = __webpack_require__(116);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.c53e1b85.js.map
+//# sourceMappingURL=main.142de492.js.map
