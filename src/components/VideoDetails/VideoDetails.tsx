@@ -26,6 +26,7 @@ const VideoDetails = ({video}: Props) => {
 
     const { dislikeCount,
             likeCount,
+            commentCount,
             viewCount} = statistics;
 
     const ChannelProps = {
@@ -59,6 +60,11 @@ const VideoDetails = ({video}: Props) => {
                 </div>
             </div>
             <div className="VideoComments__wrapper">
+                <div className="VideoComments__header">
+                    <h2 className="VideoComments__header-coment-count">
+                        {formatNumberCommas(commentCount)} Comments
+                    </h2>
+                </div>
               <VideoComments video={video} />
             </div>
         </div>

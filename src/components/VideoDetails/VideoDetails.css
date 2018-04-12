@@ -49,3 +49,18 @@
  .VideoDetails__description-details {
     padding-left: 63px;    
  }
+
+ .VideoComments__header {
+    margin-bottom: 24px;
+    display: flex;
+ }
+
+ .VideoComments__header-coment-count {
+    margin: 0;
+    padding: 0;
+    color: rgb(17, 17, 17);
+    vertical-align: middle;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+ }

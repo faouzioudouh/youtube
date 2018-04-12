@@ -6,14 +6,13 @@ import YoutubePlayer from './YoutubePlayer';
 import { currentVideo as currentVideoAction, YoutubeAction } from '../../actions/youtube';
 import { Props, Player, TState, DispatchFromProps } from './types';
 import { getRelatedVideos, getVideoById } from '../../libs/youtubeHelper.js';
+import { getVideoId } from '../../libs/common';
 
 import  {
   loadYouTubeIframeAPI,
   getTopSearchResult,
   getMostPopularVideos
 } from '../../libs/youtubeHelper.js';
-
-import { getVideoId } from '../../libs/common';
 
 class YoutubePlayerContainer extends React.Component<Props, {}> {
   player: Player;
@@ -60,7 +59,7 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
     }
   }
 
-  onPlayerStateChange({data}: MessageEvent) {
+  onPlayerStateChange({ data }: MessageEvent) {
     if (data === 0) { // Video ended
       this.playNextVideo();
     }
@@ -69,6 +68,7 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
   playNextVideo() {
     const { youtubeSetVideos } = this.props;
     let videoIndex = youtubeSetVideos.map(video => video.id).indexOf(this.props.currentVideo.id);
+
     // Play next video
     if (videoIndex !== -1 && videoIndex++ < youtubeSetVideos.length) {
       this.props.handleCurrentVideo(youtubeSetVideos[videoIndex]);
