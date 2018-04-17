@@ -1,4 +1,4 @@
-export interface Props {
+export interface YoutubePlayerProps {
     searchText: string;
     youtubeSetVideos: Array<GoogleApiYouTubeVideoResource>;
     searchYoutubeVideos: (keyword: string) => void;
@@ -15,7 +15,7 @@ export interface Player {
     target: Player;
 }
 
-export interface TState {
+export interface State {
     searchText: string;
     urlVideoId: string;
     youtubeSetVideos: Array<GoogleApiYouTubeVideoResource>;

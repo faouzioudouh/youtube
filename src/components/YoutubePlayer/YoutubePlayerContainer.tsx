@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 
 import YoutubePlayer from './YoutubePlayer';
 import { currentVideo as currentVideoAction, YoutubeAction } from '../../actions/youtube';
-import { Props, Player, TState, DispatchFromProps } from './types';
+import { YoutubePlayerProps, Player, State, DispatchFromProps } from './types';
 import { getRelatedVideos, getVideoById } from '../../libs/youtubeHelper.js';
 import { getVideoId } from '../../libs/common';
 
@@ -14,10 +14,10 @@ import  {
   getMostPopularVideos
 } from '../../libs/youtubeHelper.js';
 
-class YoutubePlayerContainer extends React.Component<Props, {}> {
+class YoutubePlayerContainer extends React.Component<YoutubePlayerProps, State> {
   player: Player;
 
-  constructor(props: Props) {
+  constructor(props: YoutubePlayerProps) {
     super(props);
 
     this.onPlayerReady = this.onPlayerReady.bind(this);
@@ -32,7 +32,7 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
       this.props.urlVideoId);
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: YoutubePlayerProps) {
     if (prevProps.searchText !== this.props.searchText) {
       this.props.searchYoutubeVideos(this.props.searchText);
     }
@@ -85,7 +85,7 @@ class YoutubePlayerContainer extends React.Component<Props, {}> {
   }
 }
 
-const mapStateToProps = ({ searchText, youtubeSetVideos, currentVideo, urlVideoId }: TState) => ({
+const mapStateToProps = ({ searchText, youtubeSetVideos, currentVideo, urlVideoId }: State) => ({
   searchText,
   youtubeSetVideos,
   currentVideo,
@@ -99,5 +99,5 @@ const mapDispatchToProps = (dispatch: Dispatch<YoutubeAction>) => ({
   relatedVideos: (videoId: string) => getRelatedVideos(videoId)(dispatch)
 });
 
-export default connect<TState, DispatchFromProps, void>
+export default connect<State, DispatchFromProps, void>
     (mapStateToProps, mapDispatchToProps)(YoutubePlayerContainer);
