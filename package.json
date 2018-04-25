@@ -41,6 +41,7 @@
     "redux-thunk": "^2.2.0",
     "source-map-loader": "^0.2.1",
     "style-loader": "0.18.2",
+    "svgr": "^1.9.1",
     "sw-precache-webpack-plugin": "0.11.3",
     "ts-jest": "^20.0.7",
     "ts-loader": "^2.2.1",
@@ -58,10 +59,11 @@
   "scripts": {
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js --env=jsdom"
+    "test": "node scripts/test.js --env=jsdom",
+    "processicons": "svgr -d src/icons/components src/icons"
   },
   "devDependencies": {
-    "@types/urijs": "^1.15.37"
+    "@types/urijs": "^1.15.37",
   },
   "jest": {
     "mapCoverage": true,

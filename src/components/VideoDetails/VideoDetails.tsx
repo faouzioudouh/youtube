@@ -6,6 +6,7 @@ import ChannelCard from '../ChannelCard';
 import FormatString from '../../helpers/FormatString';
 import Expander from '../../components/Expander';
 import VideoComments from '../../components/VideoComments';
+import Icon from '../../components/Icon';
 
 interface Props {
     video: GoogleApiYouTubeVideoResource;
@@ -45,8 +46,22 @@ const VideoDetails = ({video}: Props) => {
                 <div className="VideoDetails__metadata-views-count">
                     <span>{formatNumberCommas(viewCount)} views</span>
                 </div>
+
+                <div className="flex-fix"></div>
+
                 <div className="VideoDetails__metadata-reactions">
-                    <span>{formatNumber(likeCount)} likes | {formatNumber(dislikeCount)} dislikes</span>
+                    <div className="VideoDetails__metadata-reactions--icon">
+                        <Icon iconName="Thumbsup" className="like-icon" title="like" />
+                        <span className="VideoDetails__metadata-reactions--info">
+                            {formatNumber(likeCount)}
+                        </span>
+                    </div>
+                    <div className="VideoDetails__metadata-reactions--icon">
+                        <Icon iconName="Thumbsup" className="deslike-icon" title="deslike" />
+                        <span className="VideoDetails__metadata-reactions--info">
+                            {formatNumber(dislikeCount)}
+                        </span>
+                    </div>
                 </div>
             </div>
             <div className="VideoDetails__description">
