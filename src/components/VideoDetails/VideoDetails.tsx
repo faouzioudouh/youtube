@@ -50,13 +50,13 @@ const VideoDetails = ({video}: Props) => {
                 <div className="flex-fix"></div>
 
                 <div className="VideoDetails__metadata-reactions">
-                    <div className="VideoDetails__metadata-reactions--icon">
+                    <div className="VideoDetails__metadata-reactions-icon VideoDetails__metadata-reactions-icon--like">
                         <Icon iconName="Thumbsup" className="like-icon" title="like" />
                         <span className="VideoDetails__metadata-reactions--info">
                             {formatNumber(likeCount)}
                         </span>
                     </div>
-                    <div className="VideoDetails__metadata-reactions--icon">
+                    <div className="VideoDetails__metadata-reactions-icon">
                         <Icon iconName="Thumbsup" className="deslike-icon" title="deslike" />
                         <span className="VideoDetails__metadata-reactions--info">
                             {formatNumber(dislikeCount)}

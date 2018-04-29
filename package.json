@@ -60,10 +60,10 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js --env=jsdom",
-    "processicons": "svgr -d src/icons/components src/icons"
+    "processicons": "svgr -d src/icons/components src/icons --template src/icons.template.js --ext tsx"
   },
   "devDependencies": {
-    "@types/urijs": "^1.15.37",
+    "@types/urijs": "^1.15.37"
   },
   "jest": {
     "mapCoverage": true,

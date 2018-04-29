@@ -6,8 +6,8 @@ export interface IconProps {
     iconName: string;
     className: string;
     title?: string;
-    width?: number;
-    height?: number;
+    width?: string;
+    height?: string;
   }
 
 const Icon: React.SFC<IconProps> = ({ iconName, className, width, height }: IconProps) => {
@@ -17,8 +17,8 @@ const Icon: React.SFC<IconProps> = ({ iconName, className, width, height }: Icon
 };
 
 Icon.defaultProps = {
-    width: 20,
-    height: 20,
+    width: '20',
+    height: '20',
 }
 
 export default Icon;

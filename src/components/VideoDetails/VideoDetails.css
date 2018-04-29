@@ -75,9 +75,22 @@
  .like-icon,
  .deslike-icon {
      padding: 8px;
+     fill: rgba(17, 17, 17, 0.4);
  }
 
- .VideoDetails__metadata-reactions--icon {
+ .like-icon {
+    padding: 8px 8px 8px 0;
+ }
+
+ .deslike-icon {
+    transform: rotate(180deg);
+ }
+
+ .VideoDetails__metadata-reactions-icon--like {
+     padding-right: 15px;
+ }
+
+ .VideoDetails__metadata-reactions-icon {
     display: flex;
     justify-content: center;
     align-items: center;
