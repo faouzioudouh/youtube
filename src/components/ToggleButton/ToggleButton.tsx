@@ -1,5 +1,5 @@
 import * as React from 'react';
-import classNames from 'classnames'
+import classNames from 'classnames';
 
 import { LProps as Props } from './types';
 import './ToggleButton.css';
@@ -23,25 +23,28 @@ const ToggleButton = ({
       });
 
     return (
-        <div className={classes}
+        <div
+          className={classes}
           onClick={handleClick}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}>
+          onTouchEnd={handleTouchEnd}
+        >
   
-          <div className='toggle-button-track'>
-            <div className='toggle-button-track-check' />
+          <div className="toggle-button-track">
+            <div className="toggle-button-track-check"/>
           </div>
   
-          <div className='toggle-button-thumb' />
+          <div className="toggle-button-thumb"/>
   
           <input
             ref={handleRef}
             onFocus={handleFocus}
             onBlur={handleBlur}
             checked={checked}
-            className='visuallyHidden'
-            type='checkbox' />
+            className="visuallyHidden"
+            type="checkbox"
+          />
   
         </div>
     );
