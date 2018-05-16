@@ -39,6 +39,7 @@ const ToggleButton = ({
             ref={handleRef}
             onFocus={handleFocus}
             onBlur={handleBlur}
+            checked={checked}
             className='visuallyHidden'
             type='checkbox' />
   
