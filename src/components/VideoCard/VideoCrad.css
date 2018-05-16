@@ -16,6 +16,12 @@
     color: #0aa3e1;
 }
 
+.VideoCard__list-item--first {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid rgba(17, 17, 17, 0.2);
+}
+
 .VideoCard__list-item:last-child {
     margin-bottom: 0;
 }

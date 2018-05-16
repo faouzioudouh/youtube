@@ -1,0 +1,74 @@
+.toggle-button {
+    position: relative;
+    width: 36px;
+    height: 14px;
+    margin: 0px 1px -2px 1px;
+    touch-action: pan-x;
+    display: inline-block;
+    cursor: pointer;
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: transparent;
+}
+
+.toggle-button-track {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0.4;
+    transition: background-color linear .08s;
+    background-color: rgb(204, 204, 204);
+}
+
+.toggle-button-track-check {
+    position: absolute;
+    width: 14px;
+    height: 10px;
+    top: 0px;
+    bottom: 0px;
+    margin-top: auto;
+    margin-bottom: auto;
+    line-height: 0;
+    left: 8px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.toggle-button-thumb {
+    position: absolute;
+    top: -3px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.6);
+    background-color: rgb(144, 144, 144);
+    transition: transform linear .08s, background-color linear .08s;
+    will-change: transform;
+}
+
+.visuallyHidden {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.toggle-button--checked .toggle-button-thumb {
+    transform: translate(16px, 0);
+    background-color: rgb(6, 95, 212);
+}

@@ -1,0 +1,14 @@
+.NextVideo__header {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 24px;
+    margin-bottom: 12px;
+}
+
+.NextVideo__header-autoplay-label {
+    color: hsl(0, 0%, 53.3%);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .007px;
+    text-transform: uppercase;
+}
