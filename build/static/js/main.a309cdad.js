@@ -47905,10 +47905,10 @@ var ToggleButton = function (_a) {
         'toggle-button--focus': hasFocus
     });
     return (__WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: classes, onClick: handleClick, onTouchStart: handleTouchStart, onTouchMove: handleTouchMove, onTouchEnd: handleTouchEnd },
-        __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'toggle-button-track' },
-            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'toggle-button-track-check' })),
-        __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: 'toggle-button-thumb' }),
-        __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("input", { ref: handleRef, onFocus: handleFocus, onBlur: handleBlur, className: 'visuallyHidden', type: 'checkbox' })));
+        __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "toggle-button-track" },
+            __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "toggle-button-track-check" })),
+        __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("div", { className: "toggle-button-thumb" }),
+        __WEBPACK_IMPORTED_MODULE_0_react__["createElement"]("input", { ref: handleRef, onFocus: handleFocus, onBlur: handleBlur, checked: checked, className: "visuallyHidden", type: "checkbox" })));
 };
 /* harmony default export */ __webpack_exports__["a"] = (ToggleButton);
 
@@ -47938,10 +47938,16 @@ var pointerCoordinates = function (event) {
         var changedTouches = event.changedTouches;
         if (changedTouches && changedTouches.length > 0) {
             var touch = changedTouches[0];
-            return { x: touch.clientX, y: touch.clientY };
+            return {
+                x: touch.clientX,
+                y: touch.clientY
+            };
         }
     }
-    return { x: 0, y: 0 };
+    return {
+        x: 0,
+        y: 0
+    };
 };
 var ToggleButtonContainer = (_a = (function (_super) {
         __extends(class_1, _super);
@@ -47978,8 +47984,9 @@ var ToggleButtonContainer = (_a = (function (_super) {
             this.activated = true;
         };
         class_1.prototype.handleTouchMove = function (event) {
-            if (!this.activated)
+            if (!this.activated) {
                 return;
+            }
             this.moved = true;
             if (this.startX) {
                 var currentX = pointerCoordinates(event).x;
@@ -47996,8 +48003,9 @@ var ToggleButtonContainer = (_a = (function (_super) {
             }
         };
         class_1.prototype.handleTouchEnd = function (event) {
-            if (!this.moved)
+            if (!this.activated) {
                 return;
+            }
             var checkbox = this.input;
             event.preventDefault();
             if (this.startX) {
@@ -48020,8 +48028,6 @@ var ToggleButtonContainer = (_a = (function (_super) {
                 this.startX = null;
                 this.moved = false;
             }
-        };
-        class_1.prototype.onChange = function (event) {
         };
         class_1.prototype.handleFocus = function (event) {
             this.setState({ hasFocus: true });
@@ -51809,4 +51815,4 @@ module.exports = __webpack_require__(117);
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.4835dd12.js.map
+//# sourceMappingURL=main.a309cdad.js.map
